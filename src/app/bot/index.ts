@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
-import { replies } from "@/app/handlers/replies/replies";
 import { Bot } from "grammy";
-import { allAssetsObjectsFromDB } from "../handlers/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
-import removeAssetTrack from "@/app/handlers/removeAssetTrack/removeAssetTrack";
-import { updatUserAssetTracks } from "../handlers/updatUserAssetTracks/updatUserAssetTracks";
+import { allAssetsObjectsFromDB } from "../handlers/assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { replies } from "../handlers/ui/replies/replies";
+import removeAssetTrack from "../handlers/assetTrack/removeAssetTrack/removeAssetTrack";
+import { updatUserAssetTracks } from "../handlers/assetTrack/updatUserAssetTracks/updatUserAssetTracks";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token)

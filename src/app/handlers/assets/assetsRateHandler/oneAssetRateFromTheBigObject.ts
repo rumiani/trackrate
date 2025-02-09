@@ -1,8 +1,8 @@
 // import * as cheerio from "cheerio";
-import { CoinData } from "../../../types/coinDataTypes";
-import { formatNumHandler } from "../general/formatNumbers";
+import { CoinData } from "../../../../types/coinDataTypes";
+import { formatNumHandler } from "../../general/formatNumbers/formatNumbers";
 import { capitalize, round } from "lodash";
-import { percentageDifference } from "../percentageDifference/percentageDifference";
+import { percentageDifference } from "../../general/percentageDifference/percentageDifference";
 import { UserAssetTrack } from "@prisma/client";
 import {
   AssetDBTypes,
@@ -40,20 +40,20 @@ export default function oneAssetRateFromTheBigObject(
       newPrice = currency!.price;
       lastChange = currency!.change_percent;
     }
+
     const percentage = percentageDifference(newPrice, currentPrice);
     const bigChange = percentage >= userAssetTrack.threshold;
-    const sign = type === "CRYPTO" ? "$" : "T";
-
-    const resultText = `🚨🚨🚨🚨🚨🚨🚨\n- ${capitalize(
-      enName[0]
-    )}\nPrice: ${formatNumHandler(newPrice)} ${sign}\nLast price: ${
-      currentPrice + sign
-    }\nRecent change >= ${round(
-      percentage,
-      2
-    )}%\nSince yesterday: ${lastChange} % ${
-      lastChange > 0 ? "⬆" : "⬇"
-    }\n/assets\n/menu`;
+    const moneySign = type === "CRYPTO" ? "$" : "T";
+    const direction = newPrice > currentPrice ? "⬆" : "⬇";
+    const resultText = `🚨🚨🚨🚨🚨🚨🚨
+    - ${capitalize(enName[0])}
+    📌 Price: ${formatNumHandler(newPrice)} ${moneySign}
+    📉 Last Price: ${currentPrice}${moneySign}
+    📊 Recent Change: ${round(percentage, 2)}% ${direction}
+    📅 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
+    
+    🔗 /assets
+    📜 /menu`;
 
     return {
       currencyName: enName[0],

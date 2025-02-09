@@ -1,20 +1,15 @@
+import { bot } from "@/app/bot/index";
 import { Context } from "grammy";
-import { addUser } from "../addUser/addUser";
 import { telegramUserTypes } from "@/types/user";
 import { keyboardBuilder } from "../keyboardBuilder/keyboardBuilder";
 import { capitalize, isEmpty, toLower } from "lodash";
-import {
-  addCategoryKeyboardData,
-  allCategoriesKeyboardData,
-  percentageKeyboardData,
-  watchingAssetsListKeyboardData,
-} from "../../../data/keyboardObjects";
-import { bot } from "@/app/bot/index";
-import { allAssetsObjectsFromDB } from "../allAssetsObjectsFromDB/allAssetsObjectsFromDB";
-import userStoredData from "../userStoredData/userStoredData";
-import { uploadAssetsObjectToTheDB } from "../uploadAllAssetsToTheDB/uploadAllAssetsToTheDB";
-import getOneAssetRateFromAPI from "../assetsRateHandler/getOneAssetRateFromAPI";
-import commandHandler from "../commandHandler/commandHandler";
+import { addUser } from "../../user/addUser/addUser";
+import commands from "../../commands/commands";
+import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
+import { addCategoryKeyboardData, allCategoriesKeyboardData, percentageKeyboardData, watchingAssetsListKeyboardData } from "@/data/keyboardObjects";
+import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import userStoredData from "../../user/userStoredData/userStoredData";
+import { uploadAssetsObjectToTheDB } from "../../assets/uploadAllAssetsToTheDB/uploadAllAssetsToTheDB";
 
 const startReply = async (ctx: Context) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
@@ -50,7 +45,7 @@ const messageTextReply = async (ctx: Context) => {
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
-      const result = await commandHandler(cleanedText);
+      const result = await commands(cleanedText);
       return ctx.reply(result);
     } else ctx.reply("Bad request, click /help");
   }

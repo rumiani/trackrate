@@ -1,5 +1,5 @@
+import { CategoryKeyboardDataTypes } from "@/data/keyboardObjects";
 import { InlineKeyboard } from "grammy";
-import { CategoryKeyboardDataTypes } from "../../../data/keyboardObjects";
 
 export const keyboardBuilder = (
   list: CategoryKeyboardDataTypes[],

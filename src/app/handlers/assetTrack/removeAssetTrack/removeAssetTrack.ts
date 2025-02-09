@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Context } from "grammy";
-import userStoredData from "../userStoredData/userStoredData";
+import userStoredData from "../../user/userStoredData/userStoredData";
 
 export default async function removeAssetTrack(ctx: Context, code: string) {
   try {

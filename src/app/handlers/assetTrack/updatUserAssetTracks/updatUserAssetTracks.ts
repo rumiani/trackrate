@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
-import userStoredData from "../userStoredData/userStoredData";
 import { DirectionType, TrackingType } from "@prisma/client";
-import { allAssetsObjectsFromDB } from "../allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import userStoredData from "../../user/userStoredData/userStoredData";
+import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
 
 export async function updatUserAssetTracks(data: {
   code: string;

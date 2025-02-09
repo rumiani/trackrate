@@ -16,7 +16,7 @@ export async function addUser(newUser: telegramUserTypes) {
       data: {
         name: newUser.first_name || "",
         telegramId: newUser.id.toString(),
-        isBot: newUser.is_bot || false, // Default to false if not provided
+        isBot: newUser.is_bot || false,
         username: newUser.username || "",
         languageCode: newUser.language_code || "",
         status: "ACTIVE",

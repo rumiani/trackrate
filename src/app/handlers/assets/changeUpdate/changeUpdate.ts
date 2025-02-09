@@ -1,8 +1,8 @@
 import { bot } from "@/app/bot/index";
-import { allAssetTracksObjectsFromDB } from "../allAssetTracksObjectsFromDB/allAssetTracksObjectsFromDB";
-import { updateAssetsPrice } from "../updateAssetsPrice/updateAssetsPrice";
-import oneAssetRateFromTheBigObject from "../assetsRateHandler/oneAssetRateFromTheBigObject";
 import { allAssetsPrice } from "../assetsRateHandler/allAssetsPrice";
+import { allAssetTracksObjectsFromDB } from "../../assetTrack/allAssetTracksObjectsFromDB/allAssetTracksObjectsFromDB";
+import oneAssetRateFromTheBigObject from "../assetsRateHandler/oneAssetRateFromTheBigObject";
+import { updateAssetsPrice } from "../updateAssetsPrice/updateAssetsPrice";
 
 export default async function changeUpdate() {
   const allAssetsPriceResult = await allAssetsPrice();

@@ -1,6 +1,6 @@
-import { allAssetsObjectsFromDB } from "../allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { allAssetsObjectsFromDB } from "../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
 
-export default async function commandHandler(messageText: string) {
+export default async function commands(messageText: string) {
   const allAssets = await allAssetsObjectsFromDB();
 
   const commandReplies: { [key: string]: () => string } = {

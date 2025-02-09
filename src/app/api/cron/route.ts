@@ -3,10 +3,10 @@ export const fetchCache = "force-no-store";
 import { NextResponse } from "next/server";
 // import changeUpdate from "@/app/handlers/changeUpdate/changeUpdate";
 import { bot } from "@/app/bot";
-import { updateAssetsPrice } from "@/app/handlers/updateAssetsPrice/updateAssetsPrice";
-import { allAssetsPrice } from "@/app/handlers/assetsRateHandler/allAssetsPrice";
-import { allAssetTracksObjectsFromDB } from "@/app/handlers/allAssetTracksObjectsFromDB/allAssetTracksObjectsFromDB";
-import oneAssetRateFromTheBigObject from "@/app/handlers/assetsRateHandler/oneAssetRateFromTheBigObject";
+import { updateAssetsPrice } from "@/app/handlers/assets/updateAssetsPrice/updateAssetsPrice";
+import { allAssetsPrice } from "@/app/handlers/assets/assetsRateHandler/allAssetsPrice";
+import { allAssetTracksObjectsFromDB } from "@/app/handlers/assetTrack/allAssetTracksObjectsFromDB/allAssetTracksObjectsFromDB";
+import oneAssetRateFromTheBigObject from "@/app/handlers/assets/assetsRateHandler/oneAssetRateFromTheBigObject";
 
 export const POST = async (req: Request) => {
   const userAgent = req.headers.get("user-agent");

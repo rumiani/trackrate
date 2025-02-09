@@ -1,5 +1,5 @@
-import { CoinData } from "../../../types/coinDataTypes";
-import { formatNumHandler } from "../general/formatNumbers";
+import { CoinData } from "../../../../types/coinDataTypes";
+import { formatNumHandler } from "../../general/formatNumbers/formatNumbers";
 import { brsapiCurrencyTypes } from "@/types/other";
 import { capitalize } from "lodash";
 import { getAsset } from "./getAsset";
@@ -37,14 +37,13 @@ export default async function getOneAssetRateFromAPI(asset: string) {
     }
 
     const bigChange = Math.abs(parseFloat(lastChange)) >= 1;
-
-    const resultText = `- ${capitalize(
-      assetObject!.enName[0]
-    )}\nPrice: ${formatNumHandler(price)} ${
-      assetObject!.type === "CRYPTO" ? "$" : "T"
-    }\nSince yesterday: ${lastChange} % ${
-      lastChange > 0 ? "⬆" : "⬇"
-    }\n/assets\n/menu`;
+    const sign = assetObject!.type === "CRYPTO" ? "$" : "T";
+    const resultText = `🔹 ${capitalize(assetObject!.enName[0])}
+    💰 Price: ${formatNumHandler(price)} ${sign}
+    📅 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
+    
+    🔗 /assets
+    📜 /menu`;
 
     return {
       currencyName: assetObject!.enName[0],
