@@ -1,7 +1,7 @@
 // import * as cheerio from "cheerio";
 import { CoinData } from "../../../../types/coinDataTypes";
 import { formatNumHandler } from "../../general/formatNumbers/formatNumbers";
-import { capitalize, round } from "lodash";
+import { round, startCase } from "lodash";
 import { percentageDifference } from "../../general/percentageDifference/percentageDifference";
 import { UserAssetTrack } from "@prisma/client";
 import {
@@ -46,11 +46,11 @@ export default function oneAssetRateFromTheBigObject(
     const moneySign = type === "CRYPTO" ? "$" : "T";
     const direction = newPrice > currentPrice ? "⬆" : "⬇";
     const resultText = `🚨🚨🚨🚨🚨🚨🚨
-    - ${capitalize(enName[0])}
+    - ${startCase(enName[0])}
     📌 Price: ${formatNumHandler(newPrice)} ${moneySign}
-    📉 Last Price: ${currentPrice}${moneySign}
+    📉 Last Price: ${currentPrice} ${moneySign}
     📊 Recent Change: ${round(percentage, 2)}% ${direction}
-    📅 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
+    🗓 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
     
     🔗 /assets
     📜 /menu`;

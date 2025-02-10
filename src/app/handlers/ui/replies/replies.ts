@@ -2,17 +2,23 @@ import { bot } from "@/app/bot/index";
 import { Context } from "grammy";
 import { telegramUserTypes } from "@/types/user";
 import { keyboardBuilder } from "../keyboardBuilder/keyboardBuilder";
-import { capitalize, isEmpty, toLower } from "lodash";
+import { isEmpty, startCase, toLower } from "lodash";
 import { addUser } from "../../user/addUser/addUser";
 import commands from "../../commands/commands";
 import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
-import { addCategoryKeyboardData, allCategoriesKeyboardData, percentageKeyboardData, watchingAssetsListKeyboardData } from "@/data/keyboardObjects";
+import {
+  addCategoryKeyboardData,
+  allCategoriesKeyboardData,
+  percentageKeyboardData,
+  watchingAssetsListKeyboardData,
+} from "@/data/keyboardObjects";
 import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
 import userStoredData from "../../user/userStoredData/userStoredData";
 import { uploadAssetsObjectToTheDB } from "../../assets/uploadAllAssetsToTheDB/uploadAllAssetsToTheDB";
 
 const startReply = async (ctx: Context) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
+  console.log(addUserResponse);
 
   const welcomeMessage = `🤖: Hi ${ctx.from?.first_name},\nWelcome to the bot! 🎉\nExplore the features using /menu or get assistance with /help.`;
   const adminId = +process.env.TELEGRAM_ADMIN_ID!;
@@ -57,7 +63,7 @@ const assetReply = async (ctx: Context, assetType: string) => {
       (asset) => asset.type.toLocaleLowerCase() === assetType.toLowerCase()
     )
     .map((a) => ({
-      name: capitalize(a.enName[0]),
+      name: startCase(a.enName[0]),
       query: `add-${toLower(a.type)}_` + toLower(a.code),
     }));
 
@@ -78,7 +84,7 @@ const listReply = async (ctx: Context) => {
   let textOutPut = ``;
   user?.UserAssetTrack!.forEach(
     (assetTrack) =>
-      (textOutPut += `- ${capitalize(assetTrack.asset.enName[0])} : ${
+      (textOutPut += `- ${startCase(assetTrack.asset.enName[0])} : ${
         assetTrack.threshold
       }%\n`)
   );

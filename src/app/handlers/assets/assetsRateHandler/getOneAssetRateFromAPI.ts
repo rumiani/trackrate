@@ -1,7 +1,7 @@
 import { CoinData } from "../../../../types/coinDataTypes";
 import { formatNumHandler } from "../../general/formatNumbers/formatNumbers";
 import { brsapiCurrencyTypes } from "@/types/other";
-import { capitalize } from "lodash";
+import { startCase } from "lodash";
 import { getAsset } from "./getAsset";
 import cryptoPrice from "./cryptoPrice";
 import goldAndCurrencyPrice from "./goldAndCurrencyPrice";
@@ -38,9 +38,9 @@ export default async function getOneAssetRateFromAPI(asset: string) {
 
     const bigChange = Math.abs(parseFloat(lastChange)) >= 1;
     const sign = assetObject!.type === "CRYPTO" ? "$" : "T";
-    const resultText = `🔹 ${capitalize(assetObject!.enName[0])}
+    const resultText = `🔹 ${startCase(assetObject!.enName[0])}
     💰 Price: ${formatNumHandler(price)} ${sign}
-    📅 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
+    🗓 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
     
     🔗 /assets
     📜 /menu`;
