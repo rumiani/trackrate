@@ -10,7 +10,7 @@ export async function allAssetsObjectsFromDB() {
     const assetsCodes = allAssets.map((asset) => asset.code.toLowerCase());
     const assetsComandList = allAssets
       .map((asset) => `${startCase(asset.enName[0])}: /${toUpper(asset.code)}`)
-      .join("\n");
+      .join("\n");      
     return { allAssets, assetsCodes, assetsComandList };
   } catch {}
 }

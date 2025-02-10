@@ -19,8 +19,6 @@ bot.on("callback_query:data", async (ctx) => {
   if (message) await ctx.deleteMessage();
 
   const [action, value] = data.split("_");
-console.log(action,value);
-
   switch (action) {
     case "category":
       switch (value) {

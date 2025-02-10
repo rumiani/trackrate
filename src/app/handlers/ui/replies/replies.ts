@@ -57,8 +57,6 @@ const messageTextReply = async (ctx: Context) => {
       .toLowerCase();
 
     const result = await getOneAssetRateFromAPI(cleanedText.substring(1));
-    console.log(result);
-
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
@@ -75,7 +73,7 @@ const assetReply = async (ctx: Context, assetType: string) => {
     )
     .map((a) => ({
       name: startCase(a.enName[0]),
-      query: `add-${lowerCase(a.type)}_` + lowerCase(a.code),
+      query: `add-${lowerCase(a.type)}_` + a.code,
     }));
 
   await ctx.reply(
@@ -121,7 +119,7 @@ const removeTrackedAssetReply = async (ctx: Context) => {
     reply_markup: keyboardBuilder(data!, 2),
   });
 };
-const percentageReply = async (ctx: Context, value: string) => {
+const percentageReply = async (ctx: Context, value: string) => {  
   const data = percentageKeyboardData.map((c) => ({
     name: c + "%",
     query: value + "_" + c,

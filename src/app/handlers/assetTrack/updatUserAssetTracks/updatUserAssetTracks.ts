@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { DirectionType, TrackingType } from "@prisma/client";
 import userStoredData from "../../user/userStoredData/userStoredData";
 import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { startCase } from "lodash";
 
 export async function updatUserAssetTracks(data: {
   code: string;
@@ -45,7 +46,7 @@ export async function updatUserAssetTracks(data: {
       },
     });
     return `${
-      asset!.enName[0]
+      startCase(asset!.enName[0])
     } has been saved for ${+data.percentage}% change and you will get a message when the change happens. /menu`;
   } catch {
     return "Something went wrong. /menu";
