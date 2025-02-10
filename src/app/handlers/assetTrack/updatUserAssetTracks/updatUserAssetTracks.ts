@@ -30,7 +30,7 @@ export async function updatUserAssetTracks(data: {
         },
       });
 
-      return `${foundAssetTrack.asset.code} has been updated and you will get a message when the change happens. /menu`;
+      return `${foundAssetTrack.asset.enName[0]} has been updated and you will get a message when the change happens. /menu`;
     }
     const allAssets = await allAssetsObjectsFromDB();
     const asset = allAssets?.allAssets.find(
