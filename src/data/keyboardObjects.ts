@@ -21,5 +21,7 @@ export const watchingAssetsListKeyboardData: CategoryKeyboardDataTypes[] = [
 export const addCategoryKeyboardData: CategoryKeyboardDataTypes[] = [
   { name: "Add crypto", query: "category_add-crypto" },
   { name: "Add fiat", query: "category_add-fiat" },
+  { name: "Add gold", query: "category_add-gold" },
+
 ];
-export const percentageKeyboardData: string[] = ["0.3","0.5","1", "2", "3"];
+export const percentageKeyboardData: string[] = ["0.3","0.5","1", "2", "3","5"];

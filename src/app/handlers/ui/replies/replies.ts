@@ -2,7 +2,7 @@ import { bot } from "@/app/bot/index";
 import { Context } from "grammy";
 import { telegramUserTypes } from "@/types/user";
 import { keyboardBuilder } from "../keyboardBuilder/keyboardBuilder";
-import { isEmpty, startCase, toLower } from "lodash";
+import { isEmpty, lowerCase, startCase } from "lodash";
 import { addUser } from "../../user/addUser/addUser";
 import commands from "../../commands/commands";
 import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
@@ -18,16 +18,27 @@ import { uploadAssetsObjectToTheDB } from "../../assets/uploadAllAssetsToTheDB/u
 
 const startReply = async (ctx: Context) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
-  console.log(addUserResponse);
-
   const welcomeMessage = `🤖: Hi ${ctx.from?.first_name},\nWelcome to the bot! 🎉\nExplore the features using /menu or get assistance with /help.`;
   const adminId = +process.env.TELEGRAM_ADMIN_ID!;
-  ctx.reply(welcomeMessage);
   const userName = ctx.from?.username
     ? "Username: @" + ctx.from?.username
     : "No username";
-  const newUserToMe = `#new_user \n Name: ${ctx.from?.first_name} \n Telegram_id: ${ctx.from?.id} \n Is a bot?: ${ctx.from?.is_bot} \n ${userName}`;
-  if (addUserResponse?.isNewUser) bot.api.sendMessage(adminId!, newUserToMe);
+  if (addUserResponse) {
+    ctx.reply(welcomeMessage);
+    const newUserToMe = `#new_user \n Name: ${ctx.from?.first_name} \n Telegram_id: ${ctx.from?.id} \n Is a bot?: ${ctx.from?.is_bot} \n ${userName}`;
+    if (addUserResponse?.isNewUser) bot.api.sendMessage(adminId!, newUserToMe);
+  } else {
+    ctx.reply("Something went wrong, please contact the developer: @rumimaz");
+
+    bot.api.sendMessage(
+      adminId!,
+      `Error registering new user
+      Name ${ctx.from?.first_name}
+      Telegram_id: ${ctx.from?.id}
+      Is a bot?: ${ctx.from?.is_bot}
+      ${userName}`
+    );
+  }
 
   if (ctx.from?.id === adminId) uploadAssetsObjectToTheDB();
 };
@@ -64,7 +75,7 @@ const assetReply = async (ctx: Context, assetType: string) => {
     )
     .map((a) => ({
       name: startCase(a.enName[0]),
-      query: `add-${toLower(a.type)}_` + toLower(a.code),
+      query: `add-${lowerCase(a.type)}_` + lowerCase(a.code),
     }));
 
   await ctx.reply(

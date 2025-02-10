@@ -4,31 +4,31 @@ export const goldAssets: AssetTypes[] = [
   {
     enName: ["seke emami", "seke_emami", "/seke_emami"],
     faName: ["سکه امامی", "سکه امام"],
-    code: "seke_emami",
+    code: "sekeemami",
     type: AssetType.GOLD,
   },
   {
     enName: ["Seke Bahar Azadi", "seke_bahar_azadi", "/seke_bahar_azadi"],
     faName: ["سکه بهار آزادی", "سکه"],
-    code: "seke_bahar_azadi",
+    code: "sekebaharazadi",
     type: AssetType.GOLD,
   },
   {
     enName: ["nim seke", "nim_seke", "/nim_seke"],
     faName: ["نیم سکه", "نیم"],
-    code: "nim_seke",
+    code: "nimseke",
     type: AssetType.GOLD,
   },
   {
     enName: ["ons tala", "ons_tala", "/ons_tala"],
     faName: ["انس طلا", "انس"],
-    code: "ons_tala",
+    code: "onstala",
     type: AssetType.GOLD,
   },
   {
     enName: ["tala 18 ayar", "tala_18_ayar", "/tala_18_ayar"],
     faName: ["طلای 18 عیار", "طلا"],
-    code: "tala_18_ayar",
+    code: "tala18ayar",
     type: AssetType.GOLD,
   },
 ];

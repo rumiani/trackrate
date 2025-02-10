@@ -11,7 +11,6 @@ export async function addUser(newUser: telegramUserTypes) {
     });
 
     if (existingUser) return { user: existingUser, isNewUser: false };
-console.log(newUser);
 
     const createdUser = await prisma.user.create({
       data: {
