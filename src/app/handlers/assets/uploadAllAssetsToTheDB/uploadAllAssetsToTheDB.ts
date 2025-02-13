@@ -9,13 +9,34 @@ export async function uploadAssetsObjectToTheDB() {
       faName: asset.faName,
       type: asset.type,
       currentPrice: 0,
+      status: asset.status,
       updatedAt: new Date(),
     }));
+    const updatePromises = cleanAssets.map((asset) =>
+      prisma.asset.upsert({
+        where: { code: asset.code },
+        update: {
+          enName: asset.enName,
+          faName: asset.faName,
+          type: asset.type,
+          currentPrice: 0,
+          status: asset.status,
+          updatedAt: new Date(),
+        },
+        create: {
+          code: asset.code,
+          enName: asset.enName,
+          faName: asset.faName,
+          type: asset.type,
+          currentPrice: 0,
+          status: asset.status,
+          updatedAt: new Date(),
+        },
+      })
+    );
 
-    await prisma.$transaction([
-      prisma.asset.deleteMany(),
-      prisma.asset.createMany({ data: cleanAssets, skipDuplicates: true }),
-    ]);
+    await Promise.all(updatePromises);
+
     return true;
   } catch {
     return false;

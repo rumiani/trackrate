@@ -26,6 +26,6 @@ export async function addUser(newUser: telegramUserTypes) {
 
     return { user: createdUser, isNewUser: true };
   } catch (error: unknown) {
-    if (error instanceof Error) console.log(error.message);
+    if (error instanceof Error) return null;
   }
 }

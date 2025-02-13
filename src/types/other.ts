@@ -1,11 +1,6 @@
-import { $Enums } from "@prisma/client";
+import { $Enums, AssetType, TableStatus } from "@prisma/client";
 import { CoinData } from "./coinDataTypes";
 
-export enum AssetType {
-  CRYPTO = "CRYPTO",
-  FIAT = "FIAT",
-  GOLD = "GOLD",
-}
 
 export interface AssetObjectTypes {
   enNames: string[];
@@ -36,6 +31,7 @@ export type AssetTypes = {
   code: string;
   enName: string[];
   faName: string[];
+  status: TableStatus
   type: $Enums.AssetType;
 };
 

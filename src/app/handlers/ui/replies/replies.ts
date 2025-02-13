@@ -14,11 +14,15 @@ import {
 } from "@/data/keyboardObjects";
 import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
 import userStoredData from "../../user/userStoredData/userStoredData";
-import { uploadAssetsObjectToTheDB } from "../../assets/uploadAllAssetsToTheDB/uploadAllAssetsToTheDB";
 
 const startReply = async (ctx: Context) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
-  const welcomeMessage = `🤖: Hi ${ctx.from?.first_name},\nWelcome to the bot! 🎉\nExplore the features using /menu or get assistance with /help.`;
+  const welcomeMessage = `🤖: Hi ${ctx.from?.first_name},
+  Welcome to the bot! 🎉
+  _____________________
+  Explore the features using /menu
+  See the assets list using /assets
+  Get assistance with /help.`;
   const adminId = +process.env.TELEGRAM_ADMIN_ID!;
   const userName = ctx.from?.username
     ? "Username: @" + ctx.from?.username
@@ -39,8 +43,6 @@ const startReply = async (ctx: Context) => {
       ${userName}`
     );
   }
-
-  if (ctx.from?.id === adminId) uploadAssetsObjectToTheDB();
 };
 
 const menuReply = async (ctx: Context) => {
@@ -55,12 +57,11 @@ const messageTextReply = async (ctx: Context) => {
       .message!.text.replace("@trackrate_bot", "")
       .trim()
       .toLowerCase();
-
     const result = await getOneAssetRateFromAPI(cleanedText.substring(1));
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
-      const result = await commands(cleanedText);
+      const result = await commands(cleanedText,ctx);
       return ctx.reply(result);
     } else ctx.reply("Bad request, click /help");
   }
