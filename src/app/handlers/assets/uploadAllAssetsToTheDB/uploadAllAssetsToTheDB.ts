@@ -10,7 +10,6 @@ export async function uploadAssetsObjectToTheDB() {
           enName: asset.enName,
           faName: asset.faName,
           type: asset.type,
-          currentPrice: 0,
           status: asset.status,
           updatedAt: new Date(),
         },
