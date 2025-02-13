@@ -7,6 +7,7 @@ import { updateAssetsPrice } from "@/app/handlers/assets/updateAssetsPrice/updat
 import { allAssetsPrice } from "@/app/handlers/assets/assetsRateHandler/allAssetsPrice";
 import { allAssetTracksObjectsFromDB } from "@/app/handlers/assetTrack/allAssetTracksObjectsFromDB/allAssetTracksObjectsFromDB";
 import oneAssetRateFromTheBigObject from "@/app/handlers/assets/assetsRateHandler/oneAssetRateFromTheBigObject";
+import { lastNotifUpdate } from "@/app/handlers/user/lastNotifUpdate/lastNotifUpdate";
 
 export const POST = async (req: Request) => {
   const userAgent = req.headers.get("user-agent");
@@ -25,13 +26,13 @@ export const POST = async (req: Request) => {
         assetTrack,
         assetTrack.asset
       );
-
       if (oneAsset && oneAsset?.bigChange) {
         try {
           await bot.api.sendMessage(
             assetTrack.user.telegramId,
             oneAsset!.resultText
           );
+          await lastNotifUpdate(assetTrack.user.telegramId);
         } catch {
           bot.api.sendMessage(1028887352, "Error tracking change");
         }

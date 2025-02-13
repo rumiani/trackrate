@@ -3,16 +3,7 @@ import prisma from "@/lib/prisma";
 
 export async function uploadAssetsObjectToTheDB() {
   try {
-    const cleanAssets = allAssets.map((asset) => ({
-      code: asset.code,
-      enName: asset.enName,
-      faName: asset.faName,
-      type: asset.type,
-      currentPrice: 0,
-      status: asset.status,
-      updatedAt: new Date(),
-    }));
-    const updatePromises = cleanAssets.map((asset) =>
+    const updatePromises = allAssets.map((asset) =>
       prisma.asset.upsert({
         where: { code: asset.code },
         update: {
