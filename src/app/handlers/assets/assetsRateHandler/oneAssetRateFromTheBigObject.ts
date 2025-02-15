@@ -48,9 +48,9 @@ export default function oneAssetRateFromTheBigObject(
     const resultText = `🚨🚨🚨🚨🚨🚨🚨
     - ${startCase(enName[0])}
     📌 Price: ${formatNumHandler(newPrice)} ${moneySign}
-    📉 Last Price: ${currentPrice} ${moneySign}
+    📉 Last Price: ${formatNumHandler(currentPrice)} ${moneySign}
     📊 Recent Change: ${round(percentage, 2)}% ${direction}
-    🗓 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
+    🗓 Since Yesterday: ${round(lastChange, 2)}% ${lastChange > 0 ? "⬆" : "⬇"}
     
     🔗 /assets
     📜 /menu`;
