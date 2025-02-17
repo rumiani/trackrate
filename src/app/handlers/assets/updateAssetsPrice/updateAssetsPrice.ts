@@ -6,11 +6,10 @@ import { BigAssetsDataObjectTypes, brsapiCurrencyTypes } from "@/types/other";
 export async function updateAssetsPrice(
   assetsFromAPI: BigAssetsDataObjectTypes
 ) {
-
   const assets = await prisma.asset.findMany();
 
   try {
-    const updatePromises = assets.map((asset) => {
+    const updatePromises = assets.map(async (asset) => {
       let newPrice: number | null = null;
 
       if (asset.type === "CRYPTO") {
@@ -33,10 +32,18 @@ export async function updateAssetsPrice(
       }
 
       if (newPrice !== null) {
-        return prisma.asset.update({
-          where: { id: asset.id },
-          data: { currentPrice: newPrice },
-        });
+        await prisma.$transaction([
+          prisma.asset.update({
+            where: { id: asset.id },
+            data: { currentPrice: newPrice },
+          }),
+          prisma.priceHistory.create({
+            data: {
+              assetId: asset.id,
+              price: newPrice,
+            },
+          }),
+        ]);
       }
       return null;
     });
@@ -44,7 +51,6 @@ export async function updateAssetsPrice(
     await Promise.all(updatePromises.filter(Boolean)); // Remove null promises
 
     const adminId = +process.env.TELEGRAM_ADMIN_ID!;
-    bot.api.sendMessage(adminId!, "Assets price updated successfully");
-  } catch {
-  }
+    bot.api.sendMessage(adminId!, "Assets price updated.");
+  } catch {}
 }

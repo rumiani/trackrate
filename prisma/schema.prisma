@@ -102,9 +102,7 @@ model PriceHistory {
   asset   Asset  @relation(fields: [assetId], references: [id])
   assetId String @db.Uuid
   price   Float
-
   createdAt DateTime @default(now())
-
   // Optimized for time-series queries
   @@index([assetId, createdAt])
 }
