@@ -5,7 +5,7 @@ import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
 import path from "path";
 
-const fontPath = path.resolve(process.cwd(), "fonts", "Roboto-Regular.ttf");
+const fontPath = path.resolve(process.cwd(), "fonts", "fonts/Roboto-Regular.ttf");
 registerFont(fontPath, { family: "Roboto" });
 
 
