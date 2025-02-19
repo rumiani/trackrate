@@ -1,7 +1,8 @@
 {
-  "functions": {
-    "api/*.ts": {
-      "includeFiles": "assets/fonts/**/*"
+    "functions": {
+      "app/api/**": {
+        "includeFiles": "assets/fonts/**/*"
+      }
     }
   }
-}
+  
