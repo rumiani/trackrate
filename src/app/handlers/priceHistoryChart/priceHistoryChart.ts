@@ -3,13 +3,11 @@ import { createCanvas, registerFont } from "canvas";
 import { getPriceHistory } from "./priceHistory/priceHistory";
 import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
-// Register the custom font (e.g., Roboto Regular)
-registerFont("public/fonts/Roboto-Regular.ttf", { family: "Roboto" });
-// Register the italic version if needed
-registerFont("public/fonts/Roboto-Italic.ttf", {
-  family: "Roboto",
-  style: "italic",
-});
+import path from "path";
+
+const fontPath = path.resolve(process.cwd(), "fonts", "Roboto-Regular.ttf");
+registerFont(fontPath, { family: "Roboto" });
+
 
 export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
