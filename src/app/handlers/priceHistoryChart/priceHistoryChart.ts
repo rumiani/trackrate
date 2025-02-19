@@ -1,15 +1,22 @@
 // import prisma from "@/lib/prisma";
-import { createCanvas } from "canvas";
+import { createCanvas, registerFont } from "canvas";
 import { getPriceHistory } from "./priceHistory/priceHistory";
 import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
+// Register the custom font (e.g., Roboto Regular)
+registerFont("public/fonts/Roboto-Regular.ttf", { family: "Roboto" });
+// Register the italic version if needed
+registerFont("public/fonts/Roboto-Italic.ttf", {
+  family: "Roboto",
+  style: "italic",
+});
 
 export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
   if (!priceHistory.length) return null;
   const canvas = createCanvas(800, 400);
   const ctx = canvas.getContext("2d");
-  ctx.font = "16px sans-serif"
+  ctx.font = "16px Roboto";
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
   new Chart(chartCanvas, {
     type: "line",
@@ -34,7 +41,7 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
           labels: {
             font: {
               size: 14, // Ensure the font size is appropriate
-              family: "sans-serif", // Use Arial for labels
+              family: "Roboto", // Use Arial for labels
             },
           },
         },
