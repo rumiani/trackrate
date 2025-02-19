@@ -23,8 +23,8 @@ export const percentageKeyboardData: string[] = [
   "3",
   "5",
 ];
-export const dateRangeArray = [
-  {name:"Last 24 hours", date: "24h", range: 24 * 60 * 60 * 1000 },
+export const periodArray = [
+  {name:"Last 24 hours", date: "day", range: 24 * 60 * 60 * 1000 },
   {name:"Last Week", date: "week", range: 7 * 24 * 60 * 60 * 1000 },
   {name:"Last Month", date: "month", range: 30 * 24 * 60 * 60 * 1000 },
   {name:"Last Year", date: "year", range: 365 * 24 * 60 * 60 * 1000 },

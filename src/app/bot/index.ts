@@ -5,7 +5,7 @@ import { allAssetsObjectsFromDB } from "../handlers/assets/allAssetsObjectsFromD
 import { replies } from "../handlers/ui/replies/replies";
 import removeAssetTrack from "../handlers/assetTrack/removeAssetTrack/removeAssetTrack";
 import { updatUserAssetTracks } from "../handlers/assetTrack/updatUserAssetTracks/updatUserAssetTracks";
-import { dateRangeArray, percentageKeyboardData } from "@/data/keyboardObjects";
+import { percentageKeyboardData, periodArray } from "@/data/keyboardObjects";
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token)
@@ -18,9 +18,9 @@ bot.command("menu", replies.menuReply);
 bot.on("callback_query:data", async (ctx) => {
   const { message, data } = ctx.callbackQuery;
   if (message) await ctx.deleteMessage();
-  
+
   const [action, value] = data.split("_");
-  
+
   const actionHandlers: Record<string, (ctx: Context, value: string) => void> =
     {
       // 🏷 Category Actions
@@ -40,9 +40,8 @@ bot.on("callback_query:data", async (ctx) => {
       "history:gold": (ctx) => replies.assetReply(ctx, "gold", "history"),
 
       // 📊 Adding Assets
-      "add": (ctx, value) => replies.percentageReply(ctx, value),
-      "history": (ctx, value) => replies.periodsReply(ctx, value),
-  
+      add: (ctx, value) => replies.percentageReply(ctx, value),
+      history: (ctx, value) => replies.periodsReply(ctx, value),
 
       // ❌ Removing Assets
       remove: async (ctx, value) => {
@@ -67,7 +66,7 @@ bot.on("callback_query:data", async (ctx) => {
         price: +asset!.currentPrice,
       });
       return ctx.reply(updateMessage!);
-    } else if (dateRangeArray.map(({ date }) => date).includes(value)) {
+    } else if (periodArray.map(({ date }) => date).includes(value)) {
       return replies.priceHistoryReply(ctx, asset!, value);
     }
   }

@@ -4,14 +4,21 @@ import { getPriceHistory } from "./priceHistory/priceHistory";
 import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
 import path from "path";
+import { getFormatPriceHistoryData } from "./getFormatPriceHistoryData/getFormatPriceHistoryData";
 
 const fontPath = path.join(process.cwd(), "assets/fonts/Roboto-Regular.ttf");
 registerFont(fontPath, { family: "Roboto" });
 
-
 export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
   if (!priceHistory.length) return null;
+
+  const formatPriceHistoryData = getFormatPriceHistoryData(
+    priceHistory,
+    period
+  );
+  
+
   const canvas = createCanvas(800, 400);
   const ctx = canvas.getContext("2d");
   ctx.font = "16px Roboto";
@@ -19,13 +26,11 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   new Chart(chartCanvas, {
     type: "line",
     data: {
-      labels: priceHistory.map(
-        (entry) => entry.createdAt.toISOString().split("T")[0]
-      ),
+      labels: formatPriceHistoryData.labels,
       datasets: [
         {
           label: asset.enName[0] + " Price",
-          data: priceHistory.map((entry) => entry.price),
+          data: formatPriceHistoryData.data,
           borderColor: "blue",
           borderWidth: 2,
           fill: false,

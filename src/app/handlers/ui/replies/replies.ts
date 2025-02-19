@@ -8,8 +8,8 @@ import commands from "../../commands/commands";
 import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
 import {
   allCategoriesKeyboardData,
-  dateRangeArray,
   percentageKeyboardData,
+  periodArray,
   priceHistoryKeyboardData,
   selectAssetsKeyboardData,
 } from "@/data/keyboardObjects";
@@ -165,7 +165,7 @@ const assetHistoryListReply = async (ctx: Context) => {
 };
 
 const periodsReply = async (ctx: Context, value: string) => {
-  const data = dateRangeArray.map((c) => ({
+  const data = periodArray.map((c) => ({
     name: c.name,
     query: value + "_" + c.date,
   }));
