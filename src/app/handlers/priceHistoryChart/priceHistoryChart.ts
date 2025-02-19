@@ -3,6 +3,7 @@ import { createCanvas } from "canvas";
 import { getPriceHistory } from "./priceHistory/priceHistory";
 import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
+
 export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
   if (!priceHistory.length) return null;
@@ -28,6 +29,16 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 14, // Ensure the font size is appropriate
+              family: "Arial", // Use Arial for labels
+            },
+          },
+        },
+      },
     },
   });
   return canvas.toBuffer("image/png");
