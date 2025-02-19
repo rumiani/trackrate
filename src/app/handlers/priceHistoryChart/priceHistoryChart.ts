@@ -2,8 +2,6 @@
 import { createCanvas } from "canvas";
 import { getPriceHistory } from "./priceHistory/priceHistory";
 import Chart from "chart.js/auto";
-import * as fs from "fs";
-import * as path from "path";
 import { AssetDBTypes } from "@/types/other";
 export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
@@ -20,7 +18,7 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
       ),
       datasets: [
         {
-          label: "Price",
+          label: asset.enName[0] + " Price",
           data: priceHistory.map((entry) => entry.price),
           borderColor: "blue",
           borderWidth: 2,
@@ -32,13 +30,5 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
       responsive: true,
     },
   });
-  const filePath = path.join(__dirname, "chart.png");
-  const out = fs.createWriteStream(filePath);
-  const stream = canvas.createPNGStream();
-  stream.pipe(out);
-
-  return new Promise<string>((resolve, reject) => {
-    out.on("finish", () => resolve(filePath)); // Return file path after saving
-    out.on("error", (err) => reject(err)); // Handle error if any
-  });
+  return canvas.toBuffer("image/png");
 }
