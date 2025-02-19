@@ -15,8 +15,7 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
   if (!priceHistory.length) return null;
   const canvas = createCanvas(800, 400);
-  const ctx = canvas.getContext("2d");
-  ctx.font = "16px Roboto";
+  canvas.getContext("2d");
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
   new Chart(chartCanvas, {
     type: "line",
