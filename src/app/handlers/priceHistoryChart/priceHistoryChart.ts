@@ -9,7 +9,7 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   if (!priceHistory.length) return null;
   const canvas = createCanvas(800, 400);
   const ctx = canvas.getContext("2d");
-  ctx.font = "16px Arial";
+  ctx.font = "16px sans-serif"
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
   new Chart(chartCanvas, {
     type: "line",
@@ -34,7 +34,7 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
           labels: {
             font: {
               size: 14, // Ensure the font size is appropriate
-              family: "Arial", // Use Arial for labels
+              family: "sans-serif", // Use Arial for labels
             },
           },
         },
