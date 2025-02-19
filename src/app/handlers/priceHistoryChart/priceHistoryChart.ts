@@ -5,7 +5,7 @@ import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
 import path from "path";
 
-const fontPath = path.resolve(process.cwd(), "fonts", "fonts/Roboto-Regular.ttf");
+const fontPath = path.join(process.cwd(), "assets/fonts/Roboto-Regular.ttf");
 registerFont(fontPath, { family: "Roboto" });
 
 
@@ -13,7 +13,8 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
   const priceHistory = await getPriceHistory(asset.code, period);
   if (!priceHistory.length) return null;
   const canvas = createCanvas(800, 400);
-  canvas.getContext("2d");
+  const ctx = canvas.getContext("2d");
+  ctx.font = "16px Roboto";
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
   new Chart(chartCanvas, {
     type: "line",
