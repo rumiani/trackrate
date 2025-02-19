@@ -1,19 +1,22 @@
 import { bot } from "@/app/bot/index";
-import { Context } from "grammy";
+import { Context, InputFile } from "grammy";
 import { telegramUserTypes } from "@/types/user";
 import { keyboardBuilder } from "../keyboardBuilder/keyboardBuilder";
-import { isEmpty, lowerCase, startCase } from "lodash";
+import { isEmpty, startCase } from "lodash";
 import { addUser } from "../../user/addUser/addUser";
 import commands from "../../commands/commands";
 import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
 import {
-  addCategoryKeyboardData,
   allCategoriesKeyboardData,
+  dateRangeArray,
   percentageKeyboardData,
-  watchingAssetsListKeyboardData,
+  priceHistoryKeyboardData,
+  selectAssetsKeyboardData,
 } from "@/data/keyboardObjects";
 import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
 import userStoredData from "../../user/userStoredData/userStoredData";
+import { priceHistoryChart } from "../../priceHistoryChart/priceHistoryChart";
+import { AssetDBTypes } from "@/types/other";
 
 const startReply = async (ctx: Context) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
@@ -47,7 +50,7 @@ const startReply = async (ctx: Context) => {
 
 const menuReply = async (ctx: Context) => {
   ctx.reply(`Please choose an option from the list:`, {
-    reply_markup: keyboardBuilder(allCategoriesKeyboardData, 3),
+    reply_markup: keyboardBuilder(allCategoriesKeyboardData, 2),
   });
 };
 
@@ -61,12 +64,16 @@ const messageTextReply = async (ctx: Context) => {
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
-      const result = await commands(cleanedText,ctx);
+      const result = await commands(cleanedText, ctx);
       return ctx.reply(result);
     } else ctx.reply("Bad request, click /help");
   }
 };
-const assetReply = async (ctx: Context, assetType: string) => {
+const assetReply = async (
+  ctx: Context,
+  assetType: string,
+  operation: string
+) => {
   const allAssetsResult = await allAssetsObjectsFromDB();
   const data = allAssetsResult?.allAssets
     .filter(
@@ -74,23 +81,24 @@ const assetReply = async (ctx: Context, assetType: string) => {
     )
     .map((a) => ({
       name: startCase(a.enName[0]),
-      query: `add-${lowerCase(a.type)}_` + a.code,
+      query: `${operation}_` + a.code,
     }));
 
-  await ctx.reply(
-    `ADD ${assetType}\nPlease select a ${assetType} to track its price changes:`,
-    {
-      reply_markup: keyboardBuilder(data!, 3),
-    }
-  );
+  const caption =
+    operation === "add"
+      ? `ADD ${assetType}\nPlease select a ${assetType} to track its price changes:`
+      : `HISTORY ${assetType}\nPlease select a ${assetType} to check its history:`;
+  await ctx.reply(caption, { reply_markup: keyboardBuilder(data!, 3) });
 };
 
-const listReply = async (ctx: Context) => {
+const myListReply = async (ctx: Context) => {
   const user = await userStoredData(ctx.from!.id.toString());
-  if (isEmpty(user?.UserAssetTrack))
+  if (isEmpty(user?.UserAssetTrack)){
+    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1)
     return await ctx.reply("Your asset track list is empty. /menu", {
-      reply_markup: keyboardBuilder(addCategoryKeyboardData, 2),
+      reply_markup: keyboardBuilder(keyboardDataWithoutRemoveBtn, 2),
     });
+  }
   let textOutPut = ``;
   user?.UserAssetTrack!.forEach(
     (assetTrack) =>
@@ -102,25 +110,27 @@ const listReply = async (ctx: Context) => {
     `MY ASSET LIST\nYou have ${user?.UserAssetTrack.length} assets: \n` +
       textOutPut,
     {
-      reply_markup: keyboardBuilder(watchingAssetsListKeyboardData, 3),
+      reply_markup: keyboardBuilder(selectAssetsKeyboardData, 3),
     }
   );
 };
 const removeTrackedAssetReply = async (ctx: Context) => {
   const userStoredDataResult = await userStoredData(ctx.from!.id.toString());
-  if (isEmpty(userStoredDataResult?.UserAssetTrack))
+  if (isEmpty(userStoredDataResult?.UserAssetTrack)){
+    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1)
     return await ctx.reply("Your asset list is empty. /menu", {
-      reply_markup: keyboardBuilder(addCategoryKeyboardData, 2),
+      reply_markup: keyboardBuilder(keyboardDataWithoutRemoveBtn, 2),
     });
+  }
   const data = userStoredDataResult?.UserAssetTrack!.map((a) => ({
-    name: `${a.asset.code}  ${a.threshold} %`,
-    query: "remove-asset_" + a.asset.code,
+    name: `${a.asset.enName[0]}  ${a.threshold} %`,
+    query: "remove_" + a.asset.code,
   }));
   await ctx.reply("REMOVE\nSelect an asset to remove from the list:", {
     reply_markup: keyboardBuilder(data!, 2),
   });
 };
-const percentageReply = async (ctx: Context, value: string) => {  
+const percentageReply = async (ctx: Context, value: string) => {
   const data = percentageKeyboardData.map((c) => ({
     name: c + "%",
     query: value + "_" + c,
@@ -132,18 +142,47 @@ const percentageReply = async (ctx: Context, value: string) => {
     }
   );
 };
-const assetsListReply = async (ctx: Context) => {
+const listReply = async (ctx: Context) => {
   const allAssets = await allAssetsObjectsFromDB();
   await ctx.reply(`Assets List:\n${allAssets?.assetsComandList}`);
 };
+const priceHistoryReply = async (
+  ctx: Context,
+  asset: AssetDBTypes,
+  period: string
+) => {
+  const imageBase64 = await priceHistoryChart(asset, period);
+  if (!imageBase64) return ctx.reply("No price history available.");
+  return ctx.replyWithPhoto(new InputFile(imageBase64, "chart.png"), {
+    caption: `Price history of ${asset.enName[0]} for the past ${period}`,
+  });
+};
 
+const assetHistoryListReply = async (ctx: Context) => {
+  ctx.reply(`Please choose an asset from the list to see the history:`, {
+    reply_markup: keyboardBuilder(priceHistoryKeyboardData, 3),
+  });
+};
+
+const periodsReply = async (ctx: Context, value: string) => {
+  const data = dateRangeArray.map((c) => ({
+    name: c.name,
+    query: value + "_" + c.date,
+  }));
+  await ctx.reply("Please select a period:", {
+    reply_markup: keyboardBuilder(data, 3),
+  });
+};
 export const replies = {
   startReply,
   menuReply,
   messageTextReply,
   assetReply,
-  listReply,
+  myListReply,
   removeTrackedAssetReply,
   percentageReply,
-  assetsListReply,
+  listReply,
+  assetHistoryListReply,
+  priceHistoryReply,
+  periodsReply,
 };

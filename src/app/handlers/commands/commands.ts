@@ -6,7 +6,9 @@ import { isAdmin } from "../general/isAdmin";
 export default async function commands(messageText: string, ctx: Context) {
   const allAssets = await allAssetsObjectsFromDB();
 
-  const commandReplies: { [key: string]: () => string | Promise<string> } = {
+  const commandReplies: {
+    [key: string]: () => string | Promise<string>;
+  } = {
     "/help": () => `Available commands:\n/menu \n/assets\nDeveloper: @rumimaz`,
     "/uploadassetobject": async () => {
       if (isAdmin(ctx.from!.id)) {

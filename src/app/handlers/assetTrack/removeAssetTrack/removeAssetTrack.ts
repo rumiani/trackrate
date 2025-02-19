@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Context } from "grammy";
 import userStoredData from "../../user/userStoredData/userStoredData";
+import { startCase } from "lodash";
 
 export default async function removeAssetTrack(ctx: Context, code: string) {
   try {
@@ -14,7 +15,7 @@ export default async function removeAssetTrack(ctx: Context, code: string) {
         where: { id: assetTrack?.id },
       });
 
-      return `${assetTrack?.asset.enName[0]} asset has been removed. /menu`;
+      return `${startCase(assetTrack?.asset.enName[0])} asset has been removed. /menu`;
     }
     return "Asset not found. /menu";
   } catch {
