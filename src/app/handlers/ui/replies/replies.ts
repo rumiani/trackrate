@@ -64,8 +64,7 @@ const messageTextReply = async (ctx: Context) => {
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
-      const result = await commands(cleanedText, ctx);
-      return ctx.reply(result);
+      await commands(cleanedText, ctx);
     } else ctx.reply("Bad request, click /help");
   }
 };
@@ -93,22 +92,20 @@ const assetReply = async (
 
 const myListReply = async (ctx: Context) => {
   const user = await userStoredData(ctx.from!.id.toString());
-  if (isEmpty(user?.UserAssetTrack)){
-    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1)
+  if (isEmpty(user?.UserAssetTrack)) {
+    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1);
     return await ctx.reply("Your asset track list is empty. /menu", {
       reply_markup: keyboardBuilder(keyboardDataWithoutRemoveBtn, 2),
     });
   }
-  let textOutPut = ``;
-  user?.UserAssetTrack!.forEach(
-    (assetTrack) =>
-      (textOutPut += `- ${startCase(assetTrack.asset.enName[0])} : ${
-        assetTrack.threshold
-      }%\n`)
-  );
-  await ctx.reply(
-    `MY ASSET LIST\nYou have ${user?.UserAssetTrack.length} assets: \n` +
-      textOutPut,
+  const textOutput = user
+    ?.UserAssetTrack!.map(
+      (assetTrack) =>
+        `- ${startCase(assetTrack.asset.enName[0])} : ${assetTrack.threshold}%`
+    )
+    .join("\n");
+  return await ctx.reply(
+    `MY ASSET LIST\n${textOutput}\n\n Add or Edit an asset:`,
     {
       reply_markup: keyboardBuilder(selectAssetsKeyboardData, 3),
     }
@@ -116,14 +113,14 @@ const myListReply = async (ctx: Context) => {
 };
 const removeTrackedAssetReply = async (ctx: Context) => {
   const userStoredDataResult = await userStoredData(ctx.from!.id.toString());
-  if (isEmpty(userStoredDataResult?.UserAssetTrack)){
-    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1)
+  if (isEmpty(userStoredDataResult?.UserAssetTrack)) {
+    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1);
     return await ctx.reply("Your asset list is empty. /menu", {
       reply_markup: keyboardBuilder(keyboardDataWithoutRemoveBtn, 2),
     });
   }
   const data = userStoredDataResult?.UserAssetTrack!.map((a) => ({
-    name: `${a.asset.enName[0]}  ${a.threshold} %`,
+    name: `${startCase(a.asset.enName[0])}  ${a.threshold} %`,
     query: "remove_" + a.asset.code,
   }));
   await ctx.reply("REMOVE\nSelect an asset to remove from the list:", {

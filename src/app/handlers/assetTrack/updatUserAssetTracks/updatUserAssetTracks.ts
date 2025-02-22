@@ -30,7 +30,9 @@ export async function updatUserAssetTracks(data: {
         },
       });
 
-      return `${startCase(foundAssetTrack.asset.enName[0])} has been updated and you will get a message when the change happens. /menu`;
+      return `${startCase(
+        foundAssetTrack.asset.enName[0]
+      )} has been updated and you will get a message when the change happens.\n/myassets\n /menu`;
     }
     const allAssets = await allAssetsObjectsFromDB();
     const asset = allAssets?.allAssets.find(
@@ -45,9 +47,9 @@ export async function updatUserAssetTracks(data: {
         direction: DirectionType.INCREASE,
       },
     });
-    return `${
-      startCase(asset!.enName[0])
-    } has been saved for ${+data.percentage}% change and you will get a message when the change happens. /menu`;
+    return `${startCase(
+      asset!.enName[0]
+    )} has been saved for ${+data.percentage}% change and you will get a message when the change happens.\n/myassets\n/menu`;
   } catch {
     return "Something went wrong. /menu";
   }

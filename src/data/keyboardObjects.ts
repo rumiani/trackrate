@@ -9,9 +9,9 @@ export const allCategoriesKeyboardData: CategoryKeyboardDataTypes[] = [
 ];
 
 export const selectAssetsKeyboardData: CategoryKeyboardDataTypes[] = [
-  { name: "Add Crypto", query: "select_crypto" },
-  { name: "Add Fiat", query: "select_fiat" },
-  { name: "Add Gold", query: "select_gold" },
+  { name: "Crypto", query: "select_crypto" },
+  { name: "Fiat", query: "select_fiat" },
+  { name: "Gold", query: "select_gold" },
   { name: "Remove asset", query: "category_remove" },
 ];
 
