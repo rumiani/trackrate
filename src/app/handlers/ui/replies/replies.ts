@@ -60,6 +60,7 @@ const messageTextReply = async (ctx: Context) => {
       .message!.text.replace("@trackrate_bot", "")
       .trim()
       .toLowerCase();
+      
     const result = await getOneAssetRateFromAPI(cleanedText.substring(1));
     if (result) return await ctx.reply(result.resultText);
 

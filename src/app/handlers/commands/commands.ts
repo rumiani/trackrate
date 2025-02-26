@@ -4,8 +4,6 @@ import { uploadAssetsObjectToTheDB } from "../assets/uploadAllAssetsToTheDB/uplo
 import { replies } from "../ui/replies/replies";
 import { Message } from "grammy/types";
 
-type CommandHandler = () => string | Promise<Message>;
-
 const HELP_MESSAGE = `Available commands:
 /menu
 /assets
@@ -14,9 +12,9 @@ Developer: @rumimaz`;
 export default async function commands(messageText: string, ctx: Context) {
   const allAssets = await allAssetsObjectsFromDB();
 
-  const commandReplies: Record<string, CommandHandler> = {
+  const commandReplies: Record<string, () => Promise<Message>> = {
     "/myassets": async () => await replies.myListReply(ctx),
-    "/help": () => HELP_MESSAGE,
+    "/help": () => ctx.reply(HELP_MESSAGE),
     "/uploadassetobject": async () => {
       const uploadRes = await uploadAssetsObjectToTheDB();
       return uploadRes
@@ -24,7 +22,9 @@ export default async function commands(messageText: string, ctx: Context) {
         : ctx.reply("Failed to upload asset object.");
     },
     "/assets": () =>
-      `Assets List:\n${allAssets?.assetsComandList ?? "No assets available"}`,
+      ctx.reply(
+        `Assets List:\n${allAssets?.assetsComandList ?? "No assets available"}`
+      ),
   };
 
   return (
