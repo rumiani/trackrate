@@ -60,7 +60,7 @@ const messageTextReply = async (ctx: Context) => {
       .message!.text.replace("@trackrate_bot", "")
       .trim()
       .toLowerCase();
-      
+
     const result = await getOneAssetRateFromAPI(cleanedText.substring(1));
     if (result) return await ctx.reply(result.resultText);
 
@@ -149,11 +149,15 @@ const priceHistoryReply = async (
   asset: AssetDBTypes,
   period: string
 ) => {
-  const imageBase64 = await priceHistoryChart(asset, period);
-  if (!imageBase64) return ctx.reply("No price history available.");
-  return ctx.replyWithPhoto(new InputFile(imageBase64, "chart.png"), {
-    caption: `Price history of ${asset.enName[0]} for the past ${period}`,
-  });
+  const historyChartData = await priceHistoryChart(asset, period);
+  if (!historyChartData?.chartImage)
+    return ctx.reply("No price history available.");
+  return ctx.replyWithPhoto(
+    new InputFile(historyChartData.chartImage, "chart.png"),
+    {
+      caption: `Price history of ${asset.enName[0]} for the past ${period}\n${historyChartData.aiAnalisis}`,
+    }
+  );
 };
 
 const assetHistoryListReply = async (ctx: Context) => {

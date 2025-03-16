@@ -5,6 +5,7 @@ import Chart from "chart.js/auto";
 import { AssetDBTypes } from "@/types/other";
 import path from "path";
 import { getFormatPriceHistoryData } from "./getFormatPriceHistoryData/getFormatPriceHistoryData";
+import { getAnalisisFromFlash } from "./getAnalysisFromFlash/getAnalysisFromFlash";
 
 const fontPath = path.join(process.cwd(), "assets/fonts/Roboto-Regular.ttf");
 registerFont(fontPath, { family: "Roboto" });
@@ -17,7 +18,11 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
     priceHistory,
     period
   );
-  
+  const aiAnalisis = await getAnalisisFromFlash(
+    asset,
+    period,
+    formatPriceHistoryData
+  );
 
   const canvas = createCanvas(800, 400);
   const ctx = canvas.getContext("2d");
@@ -51,5 +56,5 @@ export async function priceHistoryChart(asset: AssetDBTypes, period: string) {
       },
     },
   });
-  return canvas.toBuffer("image/png");
+  return { aiAnalisis, chartImage: canvas.toBuffer("image/png") };
 }

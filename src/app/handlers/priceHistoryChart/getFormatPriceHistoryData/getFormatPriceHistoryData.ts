@@ -2,7 +2,6 @@ export function getFormatPriceHistoryData(
     priceHistory: { price: number; createdAt: Date }[],
     period: string
   ) {
-    console.log(period);
     
     if (period === "day") {
       const labels = priceHistory.map((entry) =>
@@ -11,9 +10,7 @@ export function getFormatPriceHistoryData(
           minute: "2-digit",
         })
       );
-      const data = priceHistory.map((entry) => entry.price);
-      console.log(data);
-      
+      const data = priceHistory.map((entry) => entry.price);      
       return { labels, data };
     } else if (period === "week") {
       const groupedData = priceHistory.reduce(
