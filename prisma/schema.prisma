@@ -98,27 +98,25 @@ model UserAssetTrack {
 }
 
 model PriceHistory {
-  id      String @id @default(uuid())
-  asset   Asset  @relation(fields: [assetId], references: [id])
-  assetId String @db.Uuid
-  price   Float
+  id        String   @id @default(uuid())
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  assetId   String   @db.Uuid
+  price     Float
   createdAt DateTime @default(now())
+
   // Optimized for time-series queries
   @@index([assetId, createdAt])
 }
 
 model Notification {
-  id           String @id @default(uuid())
-  user         User   @relation(fields: [userId], references: [id])
-  userId       String @db.Uuid
-  asset        Asset  @relation(fields: [assetId], references: [id])
-  assetId      String @db.Uuid
-  changeAmount Float
-
+  id            String @id @default(uuid())
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String @db.Uuid
+  asset         Asset  @relation(fields: [assetId], references: [id])
+  assetId       String @db.Uuid
+  changeAmount  Float
   originalPrice Float
-
-  newPrice Float
-
+  newPrice      Float
   sentAt DateTime @default(now())
 
   // For notification history lookups
