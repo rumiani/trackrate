@@ -155,7 +155,7 @@ const priceHistoryReply = async (
   return ctx.replyWithPhoto(
     new InputFile(historyChartData.chartImage, "chart.png"),
     {
-      caption: `Price history of ${asset.enName[0]} for the past ${period}\n${historyChartData.aiAnalisis}`,
+      caption: `Price history of ${asset.enName[0]} for the past ${period}\nAI analisis:\n${historyChartData.aiAnalisis}`,
     }
   );
 };
