@@ -8,6 +8,7 @@ import commands from "../../commands/commands";
 import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
 import {
   allCategoriesKeyboardData,
+  languageKeyboardData,
   percentageKeyboardData,
   periodArray,
   priceHistoryKeyboardData,
@@ -20,18 +21,19 @@ import { AssetDBTypes } from "@/types/other";
 
 const startReply = async (ctx: Context) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
-  const welcomeMessage = `🤖: Hi ${ctx.from?.first_name},
-  Welcome to the bot! 🎉
-  _____________________
-  Explore the features using /menu
-  See the assets list using /assets
-  Get assistance with /help.`;
   const adminId = +process.env.TELEGRAM_ADMIN_ID!;
   const userName = ctx.from?.username
     ? "Username: @" + ctx.from?.username
     : "No username";
   if (addUserResponse) {
-    ctx.reply(welcomeMessage);
+    ctx.reply(
+      `🤖: Hi ${ctx.from?.first_name}
+      Please select a language from the list:`,
+      {
+        reply_markup: keyboardBuilder(languageKeyboardData, 2),
+      }
+    );
+
     const newUserToMe = `#new_user \n Name: ${ctx.from?.first_name} \n Telegram_id: ${ctx.from?.id} \n Is a bot?: ${ctx.from?.is_bot} \n ${userName}`;
     if (addUserResponse?.isNewUser) bot.api.sendMessage(adminId!, newUserToMe);
   } else {
@@ -175,6 +177,11 @@ const periodsReply = async (ctx: Context, value: string) => {
     reply_markup: keyboardBuilder(data, 3),
   });
 };
+const langMenuReply = async (ctx: Context) => {
+  await ctx.reply("Please select a language from the list", {
+    reply_markup: keyboardBuilder(languageKeyboardData, 3),
+  });
+};
 export const replies = {
   startReply,
   menuReply,
@@ -187,4 +194,5 @@ export const replies = {
   assetHistoryListReply,
   priceHistoryReply,
   periodsReply,
+  langMenuReply,
 };

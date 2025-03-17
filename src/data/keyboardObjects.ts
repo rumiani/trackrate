@@ -24,14 +24,19 @@ export const percentageKeyboardData: string[] = [
   "5",
 ];
 export const periodArray = [
-  {name:"Last 24 hours", date: "day", range: 24 * 60 * 60 * 1000 },
-  {name:"Last Week", date: "week", range: 7 * 24 * 60 * 60 * 1000 },
-  {name:"Last Month", date: "month", range: 30 * 24 * 60 * 60 * 1000 },
-  {name:"Last Year", date: "year", range: 365 * 24 * 60 * 60 * 1000 },
-  {name:"All Times", date: "all", range: null }, // No limit for "all"
+  { name: "Last 24 hours", date: "day", range: 24 * 60 * 60 * 1000 },
+  { name: "Last Week", date: "week", range: 7 * 24 * 60 * 60 * 1000 },
+  { name: "Last Month", date: "month", range: 30 * 24 * 60 * 60 * 1000 },
+  { name: "Last Year", date: "year", range: 365 * 24 * 60 * 60 * 1000 },
+  { name: "All Times", date: "all", range: null }, // No limit for "all"
 ];
 export const priceHistoryKeyboardData: CategoryKeyboardDataTypes[] = [
   { name: "Crypto", query: "history_crypto" },
   { name: "Fiat", query: "history_fiat" },
   { name: "Gold", query: "history_gold" },
+];
+
+export const languageKeyboardData: CategoryKeyboardDataTypes[] = [
+  { name: "English", query: "lang_en" },
+  { name: "فارسی", query: "lang_fa" },
 ];
