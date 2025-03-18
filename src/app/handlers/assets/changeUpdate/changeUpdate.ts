@@ -10,6 +10,7 @@ export default async function changeUpdate() {
   const assetTracks = await allAssetTracksObjectsFromDB();
   for (const assetTrack of assetTracks! || []) {
     const oneAsset = oneAssetRateFromTheBigObject(
+      assetTrack.user.languageCode!,
       allAssetsPriceResult!,
       assetTrack,
       assetTrack.asset

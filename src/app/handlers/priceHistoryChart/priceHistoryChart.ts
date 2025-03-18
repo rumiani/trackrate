@@ -20,6 +20,7 @@ export async function priceHistoryChart(ctx:MyContext,asset: AssetDBTypes, perio
     period
   );
   const aiAnalisis = await getAnalisisFromFlash(
+    ctx,
     asset,
     period,
     formatPriceHistoryData

@@ -38,10 +38,13 @@ export default async function getOneAssetRateFromAPI(ctx:MyContext,asset: string
     }
 
     const bigChange = Math.abs(parseFloat(lastChange)) >= 1;
-    const sign = assetObject!.type === "CRYPTO" ? "$" : "T";
-    const resultText = `🔹 ${startCase(assetObject!.enName[0])}
-    💰 Price: ${formatNumHandler(price)} ${sign}
-    🗓 Since Yesterday: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
+    const enLang = ctx.session.__language_code === "en";
+    const toman = enLang? "T":"تومان"
+    const dollar = enLang?"$":"دلار"
+    const sign = assetObject!.type === "CRYPTO" ? dollar : toman;
+    const resultText = `🔹 ${startCase(enLang?assetObject!.enName[0]:assetObject!.faName[0])}
+    💰 ${ctx.t("price")}: ${formatNumHandler(price)} ${sign}
+    🗓 ${ctx.t("sinceYesterday")}: ${lastChange}% ${lastChange > 0 ? "⬆" : "⬇"}
     
     🔗 /assets
     📜 /menu`;

@@ -22,6 +22,7 @@ export const POST = async (req: Request) => {
     const assetTracks = await allAssetTracksObjectsFromDB();
     for (const assetTrack of assetTracks! || []) {
       const oneAsset = oneAssetRateFromTheBigObject(
+        assetTrack.user.languageCode!,
         allAssetsPriceResult!,
         assetTrack,
         assetTrack.asset

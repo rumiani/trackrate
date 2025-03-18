@@ -7,13 +7,13 @@ language_set = زبان به فارسی تغییر کرد
 help = دستورات در دسترس:
         منو رو اینجا ببین /menu
         لیست همه دارایی‌ها رو ببین /assets
-        برای تغییر زبان این گزینه رو بزن \language
+        برای تغییر زبان این گزینه رو بزن /language
         ارتباط با توسعه‌دهنده این ربات @rumimaz
 badRequest = درخواست غیر قابل پردازش /help
 menuCaption = لطفا یک گزینه را انتخاب کنید.
 myAssetListTitle = لیست دارایی‌های من
 myAssetListAddEdit = یک دارایی را اضافه یا ویرایش کنید:
-emptyAssetTrack = لیست رصد دارایی‌های شما خالی است \menu
+emptyAssetTrack = لیست رصد دارایی‌های شما خالی است /menu
 removeCaption = یک دارایی را برای حذف کردن از لیست انتخاب نمایید:
 assetsList = لیست دارایی‌ها:
 addAsset = اضافه کردن دارایی
@@ -28,7 +28,7 @@ assetUpdated = آپدیت شد و در صورت تغییر این دارایی،
                 /menu 
 chooseLanguage = لطفا زبان مورد نظر خود را انتخاب نمایید:
 noPriceHistory = تاریخچه قیمتی یافت نشد.
-somethingWrong = خطایی رخ داده است. \help
+somethingWrong = خطایی رخ داده است. /help
 history = تاریخچه
 aiAnalisis = تحلیل هوش‌مصنوعی
 period = دوره زمانی
@@ -48,3 +48,6 @@ lastMonth = ماه گذشته
 lastYear = سال گذشته
 allTimes = همه زمان‌ها
 cancel = انصراف
+
+price = قیمت
+sinceYesterday = اختلاف قیمت از دیروز

@@ -11,6 +11,7 @@ import {
 } from "@/types/other";
 
 export default function oneAssetRateFromTheBigObject(
+  userLang: string,
   bigAssetsDataObject: BigAssetsDataObjectTypes,
   userAssetTrack: UserAssetTrack,
   asset: AssetDBTypes
@@ -43,7 +44,10 @@ export default function oneAssetRateFromTheBigObject(
 
     const percentage = percentageDifference(newPrice, currentPrice);
     const bigChange = percentage >= userAssetTrack.threshold;
-    const moneySign = type === "CRYPTO" ? "$" : "T";
+    const enLang = userLang === "en";
+    const toman = enLang ? "T" : "تومان";
+    const dollar = enLang ? "$" : "دلار";
+    const moneySign = type === "CRYPTO" ? dollar : toman;
     const direction = newPrice > currentPrice ? "⬆" : "⬇";
     const resultText = `🚨🚨🚨🚨🚨🚨🚨
     - ${startCase(enName[0])}
