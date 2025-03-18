@@ -11,8 +11,12 @@ import { MyContext } from "@/app/bot";
 const fontPath = path.join(process.cwd(), "assets/fonts/Roboto-Regular.ttf");
 registerFont(fontPath, { family: "Roboto" });
 
-export async function priceHistoryChart(ctx:MyContext,asset: AssetDBTypes, period: string) {
-  const priceHistory = await getPriceHistory(ctx,asset.code, period);
+export async function priceHistoryChart(
+  ctx: MyContext,
+  asset: AssetDBTypes,
+  period: string
+) {
+  const priceHistory = await getPriceHistory(ctx, asset.code, period);
   if (!priceHistory.length) return null;
 
   const formatPriceHistoryData = getFormatPriceHistoryData(
@@ -30,13 +34,14 @@ export async function priceHistoryChart(ctx:MyContext,asset: AssetDBTypes, perio
   const chartCtx = canvas.getContext("2d");
   chartCtx.font = "16px Roboto";
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
+  const enLang = ctx.session.__language_code === "en";
   new Chart(chartCanvas, {
     type: "line",
     data: {
       labels: formatPriceHistoryData.labels,
       datasets: [
         {
-          label: asset.enName[0] + " Price",
+          label: enLang ? asset.enName[0] : asset.faName[0],
           data: formatPriceHistoryData.data,
           borderColor: "blue",
           borderWidth: 2,

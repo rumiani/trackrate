@@ -14,8 +14,10 @@ myAssetListTitle = MY ASSET LIST
 myAssetListAddEdit = Add or Edit an asset:
 emptyAssetTrack = Your asset track list is empty. /menu
 removeCaption = REMOVE\nSelect an asset to remove from the list:
+assetRemovedCaption = asset has been removed. /menu
 assetsList = Assets List:
 noAssetsAvailable = No assets available.
+assetNotFound = Asset not found. /menu
 
 chooseAssetToAdd = Please choose an asset to track its price changes:
 chooseAssetToSeeHistory = Please choose an asset from the list to see the history:

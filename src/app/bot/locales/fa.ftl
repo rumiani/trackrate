@@ -15,9 +15,12 @@ myAssetListTitle = لیست دارایی‌های من
 myAssetListAddEdit = یک دارایی را اضافه یا ویرایش کنید:
 emptyAssetTrack = لیست رصد دارایی‌های شما خالی است /menu
 removeCaption = یک دارایی را برای حذف کردن از لیست انتخاب نمایید:
+assetRemovedCaption = از لیست حذف شد. /menu
 assetsList = لیست دارایی‌ها:
 addAsset = اضافه کردن دارایی
 noAssetsAvailable = هیچ دارایی‌ای یافت نشد.
+assetNotFound = دارایی‌ای یافت نشد. /menu
+
 chooseAssetToAdd = لطفا یک دارایی را انتخاب نمایید:
 chooseAssetToSeeHistory = لطفا یک دارایی را برای مشاهده تاریخچه انتخاب نمایید:
 choosePeriod = یک دوره زمانی را انتخاب نمایید:
