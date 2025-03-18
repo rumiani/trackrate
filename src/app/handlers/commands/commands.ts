@@ -5,7 +5,7 @@ import { Message } from "grammy/types";
 import { MyContext } from "@/app/bot";
 
 export default async function commands(messageText: string, ctx: MyContext) {
-  const allAssets = await allAssetsObjectsFromDB();
+  const allAssets = await allAssetsObjectsFromDB(ctx);
 
   const commandReplies: Record<string, () => Promise<Message>> = {
     "/myassets": async () => await replies.myListReply(ctx),

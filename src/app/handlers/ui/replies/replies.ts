@@ -63,7 +63,7 @@ const messageTextReply = async (ctx: MyContext) => {
       .trim()
       .toLowerCase();
 
-    const result = await getOneAssetRateFromAPI(cleanedText.substring(1));
+    const result = await getOneAssetRateFromAPI(ctx,cleanedText.substring(1));
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {

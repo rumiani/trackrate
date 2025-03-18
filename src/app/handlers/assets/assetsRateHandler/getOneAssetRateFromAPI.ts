@@ -5,10 +5,11 @@ import { startCase } from "lodash";
 import { getAsset } from "./getAsset";
 import cryptoPrice from "./cryptoPrice";
 import goldAndCurrencyPrice from "./goldAndCurrencyPrice";
+import { MyContext } from "@/app/bot";
 
-export default async function getOneAssetRateFromAPI(asset: string) {
+export default async function getOneAssetRateFromAPI(ctx:MyContext,asset: string) {
   try {
-    const assetObject = await getAsset(asset);
+    const assetObject = await getAsset(ctx,asset);
 
     let price;
     let lastChange;
