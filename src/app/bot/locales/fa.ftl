@@ -58,4 +58,6 @@ year = سال
 all = همه زمان‌ها
 
 price = قیمت
+lastPrice = آخرین قیمت
 sinceYesterday = اختلاف قیمت از دیروز
+recentChange = تغییرات اخیر

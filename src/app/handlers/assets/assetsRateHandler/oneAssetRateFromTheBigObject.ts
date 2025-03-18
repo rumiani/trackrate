@@ -9,6 +9,7 @@ import {
   BigAssetsDataObjectTypes,
   brsapiCurrencyTypes,
 } from "@/types/other";
+import { i18n } from "@/app/bot";
 
 export default function oneAssetRateFromTheBigObject(
   userLang: string,
@@ -49,12 +50,13 @@ export default function oneAssetRateFromTheBigObject(
     const dollar = enLang ? "$" : "دلار";
     const moneySign = type === "CRYPTO" ? dollar : toman;
     const direction = newPrice > currentPrice ? "⬆" : "⬇";
+
     const resultText = `🚨🚨🚨🚨🚨🚨🚨
-    - ${startCase(enName[0])}
-    📌 Price: ${formatNumHandler(newPrice)} ${moneySign}
-    📉 Last Price: ${formatNumHandler(currentPrice)} ${moneySign}
-    📊 Recent Change: ${round(percentage, 2)}% ${direction}
-    🗓 Since Yesterday: ${round(lastChange, 2)}% ${lastChange > 0 ? "⬆" : "⬇"}
+    - ${startCase(enLang ? enName[0] : faName[0])}
+    📌 ${i18n.fluent.translate(userLang, "price") || "Price"}: ${formatNumHandler(newPrice)} ${moneySign}
+    📉 ${i18n.fluent.translate(userLang, "lastPrice") || "Last Price"}: ${formatNumHandler(currentPrice)} ${moneySign}
+    📊 ${i18n.fluent.translate(userLang, "recentChange") || "Recent Change"}: ${round(percentage, 2)}% ${direction}
+    🗓 ${i18n.fluent.translate(userLang, "sinceYesterday") || "Since Yesterday"}: ${round(lastChange, 2)}% ${lastChange > 0 ? "⬆" : "⬇"}
     
     🔗 /assets
     📜 /menu`;

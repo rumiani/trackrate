@@ -34,14 +34,14 @@ export async function priceHistoryChart(
   const chartCtx = canvas.getContext("2d");
   chartCtx.font = "16px Roboto";
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
-  const enLang = ctx.session.__language_code === "en";
+  // const enLang = ctx.session.__language_code === "en";
   new Chart(chartCanvas, {
     type: "line",
     data: {
       labels: formatPriceHistoryData.labels,
       datasets: [
         {
-          label: enLang ? asset.enName[0] : asset.faName[0],
+          label: asset.enName[0],
           data: formatPriceHistoryData.data,
           borderColor: "blue",
           borderWidth: 2,

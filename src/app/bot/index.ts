@@ -20,7 +20,7 @@ export type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor;
 
 export const bot = new Bot<MyContext>(token);
 
-const i18n = new I18n<MyContext>({
+export const i18n = new I18n<MyContext>({
   defaultLocale: "en",
   directory: path.join(process.cwd(), "src", "app", "bot", "locales"),
   useSession: true,

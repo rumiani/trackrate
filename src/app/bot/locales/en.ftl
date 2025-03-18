@@ -58,4 +58,6 @@ year = year
 all = all times 
 
 price = Price
+lastPrice = Last Price
 sinceYesterday = Since Yesterday
+recentChange = Recent Change
