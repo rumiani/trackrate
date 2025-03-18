@@ -1,8 +1,8 @@
-import { bot } from "@/app/bot/index";
-import { Context, InputFile } from "grammy";
+import { bot, MyContext } from "@/app/bot/index";
+import { InputFile } from "grammy";
 import { telegramUserTypes } from "@/types/user";
 import { keyboardBuilder } from "../keyboardBuilder/keyboardBuilder";
-import { isEmpty, startCase } from "lodash";
+import { capitalize, isEmpty, startCase } from "lodash";
 import { addUser } from "../../user/addUser/addUser";
 import commands from "../../commands/commands";
 import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
@@ -19,7 +19,7 @@ import userStoredData from "../../user/userStoredData/userStoredData";
 import { priceHistoryChart } from "../../priceHistoryChart/priceHistoryChart";
 import { AssetDBTypes } from "@/types/other";
 
-const startReply = async (ctx: Context) => {
+const startReply = async (ctx: MyContext) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
   const adminId = +process.env.TELEGRAM_ADMIN_ID!;
   const userName = ctx.from?.username
@@ -27,17 +27,17 @@ const startReply = async (ctx: Context) => {
     : "No username";
   if (addUserResponse) {
     ctx.reply(
-      `🤖: Hi ${ctx.from?.first_name}
-      Please select a language from the list:`,
+      `🤖: ${ctx.t("hi")} ${ctx.from?.first_name}
+    ${ctx.t("chooseLanguage")}`,
       {
-        reply_markup: keyboardBuilder(languageKeyboardData, 2),
+        reply_markup: keyboardBuilder(ctx, languageKeyboardData, 2),
       }
     );
 
     const newUserToMe = `#new_user \n Name: ${ctx.from?.first_name} \n Telegram_id: ${ctx.from?.id} \n Is a bot?: ${ctx.from?.is_bot} \n ${userName}`;
     if (addUserResponse?.isNewUser) bot.api.sendMessage(adminId!, newUserToMe);
   } else {
-    ctx.reply("Something went wrong, please contact the developer: @rumimaz");
+    ctx.reply(ctx.t("somethingWrong"));
 
     bot.api.sendMessage(
       adminId!,
@@ -50,13 +50,13 @@ const startReply = async (ctx: Context) => {
   }
 };
 
-const menuReply = async (ctx: Context) => {
-  ctx.reply(`Please choose an option from the list:`, {
-    reply_markup: keyboardBuilder(allCategoriesKeyboardData, 2),
+const menuReply = async (ctx: MyContext) => {
+  ctx.reply(ctx.t("menuCaption"), {
+    reply_markup: keyboardBuilder(ctx, allCategoriesKeyboardData(ctx), 2),
   });
 };
 
-const messageTextReply = async (ctx: Context) => {
+const messageTextReply = async (ctx: MyContext) => {
   if (ctx.message!.text) {
     const cleanedText = ctx
       .message!.text.replace("@trackrate_bot", "")
@@ -68,118 +68,131 @@ const messageTextReply = async (ctx: Context) => {
 
     if (cleanedText.startsWith("/")) {
       await commands(cleanedText, ctx);
-    } else ctx.reply("Bad request, click /help");
+    } else ctx.reply(ctx.t("badRequest"));
   }
 };
 const assetReply = async (
-  ctx: Context,
+  ctx: MyContext,
   assetType: string,
   operation: string
 ) => {
-  const allAssetsResult = await allAssetsObjectsFromDB();
+  const allAssetsResult = await allAssetsObjectsFromDB(ctx);
+  const lang = ctx.session.__language_code;
   const data = allAssetsResult?.allAssets
     .filter(
       (asset) => asset.type.toLocaleLowerCase() === assetType.toLowerCase()
     )
     .map((a) => ({
-      name: startCase(a.enName[0]),
+      name: startCase(lang === "en" ? a.enName[0] : a.faName[0]),
       query: `${operation}_` + a.code,
     }));
 
   const caption =
     operation === "add"
-      ? `ADD ${assetType}\nPlease select a ${assetType} to track its price changes:`
-      : `HISTORY ${assetType}\nPlease select a ${assetType} to check its history:`;
-  await ctx.reply(caption, { reply_markup: keyboardBuilder(data!, 3) });
+      ? `${ctx.t("addAsset")}\n${ctx.t("chooseAssetToAdd")}`
+      : `${capitalize(ctx.t("history"))} ${ctx.t(assetType)}\n ${ctx.t("chooseAnAsset")}`;
+  await ctx.reply(caption, { reply_markup: keyboardBuilder(ctx, data!, 3) });
 };
 
-const myListReply = async (ctx: Context) => {
+const myListReply = async (ctx: MyContext) => {
   const user = await userStoredData(ctx.from!.id.toString());
   if (isEmpty(user?.UserAssetTrack)) {
-    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1);
-    return await ctx.reply("Your asset track list is empty. /menu", {
-      reply_markup: keyboardBuilder(keyboardDataWithoutRemoveBtn, 2),
+    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData(ctx).slice(
+      0,
+      -1
+    );
+    return await ctx.reply(ctx.t("emptyAssetTrack"), {
+      reply_markup: keyboardBuilder(ctx, keyboardDataWithoutRemoveBtn, 2),
     });
   }
   const textOutput = user
-    ?.UserAssetTrack!.map(
-      (assetTrack) =>
-        `- ${startCase(assetTrack.asset.enName[0])} : ${assetTrack.threshold}%`
-    )
+    ?.UserAssetTrack!.map((assetTrack) => {
+      const userLang = ctx.session.__language_code;
+      const assetName =
+        userLang === "en"
+          ? assetTrack.asset.enName[0]
+          : assetTrack.asset.faName[0];
+      return `- ${startCase(assetName)} : ${assetTrack.threshold}%`;
+    })
     .join("\n");
   return await ctx.reply(
-    `MY ASSET LIST\n${textOutput}\n\n Add or Edit an asset:`,
+    `${ctx.t("myAssetListTitle")}\n${textOutput}\n\n ${ctx.t("myAssetListAddEdit")}`,
     {
-      reply_markup: keyboardBuilder(selectAssetsKeyboardData, 3),
+      reply_markup: keyboardBuilder(ctx, selectAssetsKeyboardData(ctx), 3),
     }
   );
 };
-const removeTrackedAssetReply = async (ctx: Context) => {
+const removeTrackedAssetReply = async (ctx: MyContext) => {
   const userStoredDataResult = await userStoredData(ctx.from!.id.toString());
   if (isEmpty(userStoredDataResult?.UserAssetTrack)) {
-    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData.slice(0, -1);
-    return await ctx.reply("Your asset list is empty. /menu", {
-      reply_markup: keyboardBuilder(keyboardDataWithoutRemoveBtn, 2),
+    const keyboardDataWithoutRemoveBtn = selectAssetsKeyboardData(ctx).slice(
+      0,
+      -1
+    );
+    return await ctx.reply(ctx.t("emptyAssetTrack"), {
+      reply_markup: keyboardBuilder(ctx, keyboardDataWithoutRemoveBtn, 2),
     });
   }
+  const lang = ctx.session.__language_code;
   const data = userStoredDataResult?.UserAssetTrack!.map((a) => ({
-    name: `${startCase(a.asset.enName[0])}  ${a.threshold} %`,
+    name: `${startCase(lang === "en"?a.asset.enName[0]:a.asset.faName[0])}  ${a.threshold} %`,
     query: "remove_" + a.asset.code,
   }));
-  await ctx.reply("REMOVE\nSelect an asset to remove from the list:", {
-    reply_markup: keyboardBuilder(data!, 2),
+  await ctx.reply(ctx.t("removeCaption"), {
+    reply_markup: keyboardBuilder(ctx, data!, 2),
   });
 };
-const percentageReply = async (ctx: Context, value: string) => {
+const percentageReply = async (ctx: MyContext, value: string) => {
   const data = percentageKeyboardData.map((c) => ({
     name: c + "%",
     query: value + "_" + c,
   }));
-  await ctx.reply(
-    "PERCENTAGE\nSelect the percentage change at which you’d like to receive alerts:",
-    {
-      reply_markup: keyboardBuilder(data, 3),
-    }
-  );
+  await ctx.reply(ctx.t("choosePercentageCaption"), {
+    reply_markup: keyboardBuilder(ctx, data, 3),
+  });
 };
-const listReply = async (ctx: Context) => {
-  const allAssets = await allAssetsObjectsFromDB();
-  await ctx.reply(`Assets List:\n${allAssets?.assetsComandList}`);
+const listReply = async (ctx: MyContext) => {
+  const allAssets = await allAssetsObjectsFromDB(ctx);
+  await ctx.reply(`${ctx.t("assetsList")}\n${allAssets?.assetsComandList}`);
 };
 const priceHistoryReply = async (
-  ctx: Context,
+  ctx: MyContext,
   asset: AssetDBTypes,
   period: string
 ) => {
-  const historyChartData = await priceHistoryChart(asset, period);
-  if (!historyChartData?.chartImage)
-    return ctx.reply("No price history available.");
+  const historyChartData = await priceHistoryChart(ctx, asset, period);
+
+  if (!historyChartData?.chartImage) return ctx.reply(ctx.t("noPriceHistory"));
+  const userLang = ctx.session.__language_code;
+  const periodObject = periodArray(ctx).find(
+    (periodObject) => periodObject.date === period
+  );
   return ctx.replyWithPhoto(
     new InputFile(historyChartData.chartImage, "chart.png"),
     {
-      caption: `Price history of ${asset.enName[0]} for the past ${period}\nAI analisis:\n${historyChartData.aiAnalisis}`,
+      caption: `${ctx.t("priceChart")}\n ${ctx.t("asset")} ${userLang === "en" ? asset.enName[0] : asset.faName[0]}\n ${ctx.t("period")}: ${periodObject!.name}\n${ctx.t("aiAnalisis")}:\n${historyChartData.aiAnalisis}`,
     }
   );
 };
 
-const assetHistoryListReply = async (ctx: Context) => {
-  ctx.reply(`Please choose an asset from the list to see the history:`, {
-    reply_markup: keyboardBuilder(priceHistoryKeyboardData, 3),
+const assetHistoryListReply = async (ctx: MyContext) => {
+  ctx.reply(ctx.t("chooseAssetToSeeHistory"), {
+    reply_markup: keyboardBuilder(ctx, priceHistoryKeyboardData(ctx), 3),
   });
 };
 
-const periodsReply = async (ctx: Context, value: string) => {
-  const data = periodArray.map((c) => ({
+const periodsReply = async (ctx: MyContext, value: string) => {
+  const data = periodArray(ctx).map((c) => ({
     name: c.name,
     query: value + "_" + c.date,
   }));
-  await ctx.reply("Please select a period:", {
-    reply_markup: keyboardBuilder(data, 3),
+  await ctx.reply(ctx.t("choosePeriod"), {
+    reply_markup: keyboardBuilder(ctx, data, 3),
   });
 };
-const langMenuReply = async (ctx: Context) => {
-  await ctx.reply("Please select a language from the list", {
-    reply_markup: keyboardBuilder(languageKeyboardData, 3),
+const langMenuReply = async (ctx: MyContext) => {
+  await ctx.reply(ctx.t("chooseLanguage"), {
+    reply_markup: keyboardBuilder(ctx, languageKeyboardData, 3),
   });
 };
 export const replies = {

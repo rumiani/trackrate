@@ -16,7 +16,7 @@ interface SessionData {
 const token = process.env.TELEGRAM_BOT_TOKEN;
 if (!token) throw new Error("TELEGRAM TOKEN not found.");
 
-type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor;
+export type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor;
 
 export const bot = new Bot<MyContext>(token);
 
@@ -99,14 +99,14 @@ bot.on("callback_query:data", async (ctx) => {
       await ctx.i18n.setLocale(value);
       const result = await changeUserLang(ctx.from!.id.toString(), value);
       if (result) await ctx.reply(ctx.t("language_set"));
-      else await ctx.reply('Something went wrong. /help')
+      else await ctx.reply(ctx.t("somethingWrong"));
     },
   };
   const handler =
     actionHandlers[`${action}:${value}`] || actionHandlers[action];
   if (handler) return handler(ctx, value);
 
-  const allAssets = await allAssetsObjectsFromDB();
+  const allAssets = await allAssetsObjectsFromDB(ctx);
   if (allAssets?.assetsCodes.includes(action)) {
     const asset = allAssets.allAssets.find(
       (asset) => asset?.code.toLowerCase() === action.toLowerCase()
@@ -115,11 +115,10 @@ bot.on("callback_query:data", async (ctx) => {
       const updateMessage = await updatUserAssetTracks({
         code: action,
         percentage: value,
-        userId: +ctx.from?.id,
-        price: +asset!.currentPrice,
+        ctx,
       });
       return ctx.reply(updateMessage!);
-    } else if (periodArray.map(({ date }) => date).includes(value)) {
+    } else if (periodArray(ctx).map(({ date }) => date).includes(value)) {
       return replies.priceHistoryReply(ctx, asset!, value);
     }
   }
