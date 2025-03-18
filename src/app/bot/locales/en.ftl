@@ -51,7 +51,11 @@ lastMonth = Last Month
 lastYear = Last Year
 allTimes = All Times
 cancel = Cancel
-
+day = day
+week = week
+month = month
+year = year
+all = all times 
 
 price = Price
 sinceYesterday = Since Yesterday

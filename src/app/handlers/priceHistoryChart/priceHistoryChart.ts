@@ -32,7 +32,7 @@ export async function priceHistoryChart(
 
   const canvas = createCanvas(800, 400);
   const chartCtx = canvas.getContext("2d");
-  chartCtx.font = "16px Roboto";
+  chartCtx.font = "16px Arial";
   const chartCanvas = canvas as unknown as HTMLCanvasElement;
   const enLang = ctx.session.__language_code === "en";
   new Chart(chartCanvas, {

@@ -51,6 +51,11 @@ lastMonth = ماه گذشته
 lastYear = سال گذشته
 allTimes = همه زمان‌ها
 cancel = انصراف
+day = روز
+week = هفته
+month = ماه
+year = سال
+all = همه زمان‌ها
 
 price = قیمت
 sinceYesterday = اختلاف قیمت از دیروز
