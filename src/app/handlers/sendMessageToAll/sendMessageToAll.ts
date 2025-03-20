@@ -16,11 +16,11 @@ export async function sendMessageToAll(ctx: MyContext) {
   msg = msg.replace(/#allen|#allfa/gi, "");
   if (msgLang === "en") {
     for (const user of englishUsers) {
-      bot.api.sendMessage(+user.telegramId, msg);
+      bot.api.sendMessage(user.telegramId, msg);
     }
   } else {
     for (const user of persianUsers) {
-      bot.api.sendMessage(+user.telegramId, msg);
+      bot.api.sendMessage(user.telegramId, msg);
     }
   }
 
