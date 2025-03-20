@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 export async function sendMessageToAll(ctx: MyContext) {
   const AdminId = process.env.TELEGRAM_ADMIN_ID!;
   const userId = ctx.from!.id.toString();
-  if (userId === AdminId) return;
+  if (userId != AdminId) return;
 
   let msg = ctx.message!.text!;
   const msgLang = msg.startsWith("#allen") ? "en" : "fa";
@@ -13,14 +13,13 @@ export async function sendMessageToAll(ctx: MyContext) {
   const englishUsers = users.filter((user) => user.languageCode === "en");
   const persianUsers = users.filter((user) => user.languageCode !== "en");
 
+  msg = msg.replace(/#allen|#allfa/gi, "");
   if (msgLang === "en") {
     for (const user of englishUsers) {
-      msg = msg.replace(/#allen|#allfa/gi, "");
       bot.api.sendMessage(+user.telegramId, msg);
     }
   } else {
     for (const user of persianUsers) {
-      msg = msg.replace(/#allen|#allfa/gi, "");
       bot.api.sendMessage(+user.telegramId, msg);
     }
   }
