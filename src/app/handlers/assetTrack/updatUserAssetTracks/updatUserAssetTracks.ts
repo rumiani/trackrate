@@ -12,6 +12,7 @@ export async function updatUserAssetTracks(data: {
 }) {
   try {
     const { code, percentage, ctx } = data;
+    const enLang = ctx.session.__language_code === "en";
     const userData = await userStoredData(ctx.from!.id.toString());
     if (!userData) return;
     const foundAssetTrack = userData.UserAssetTrack.find(
@@ -29,11 +30,9 @@ export async function updatUserAssetTracks(data: {
           direction: DirectionType.INCREASE,
         },
       });
-      const lang = ctx.session.__language_code;
-      const track =
-        lang === "en"
-          ? foundAssetTrack.asset.enName[0]
-          : foundAssetTrack.asset.faName[0];
+      const track = enLang
+        ? foundAssetTrack.asset.enName[0]
+        : foundAssetTrack.asset.faName[0];
       return `${startCase(track)} ${ctx.t("assetUpdated")}`;
     }
     const allAssets = await allAssetsObjectsFromDB(ctx);
@@ -49,9 +48,8 @@ export async function updatUserAssetTracks(data: {
         direction: DirectionType.INCREASE,
       },
     });
-    return `${startCase(
-      asset!.enName[0]
-    )} has been saved for ${+percentage}% change and you will get a message when the change happens.\n/myassets\n/menu`;
+    const assetName = enLang ? asset!.enName[0] : asset!.faName[0];
+    return `${ctx.t('asset')}: ${startCase(assetName)}\n${ctx.t('percentage')}: ${+percentage}%\n ${ctx.t("assetSaved")}`;
   } catch {
     return "Something went wrong. /menu";
   }

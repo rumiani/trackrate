@@ -18,6 +18,7 @@ import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allA
 import userStoredData from "../../user/userStoredData/userStoredData";
 import { priceHistoryChart } from "../../priceHistoryChart/priceHistoryChart";
 import { AssetDBTypes } from "@/types/other";
+import { sendMessageToAll } from "../../sendMessageToAll/sendMessageToAll";
 
 const startReply = async (ctx: MyContext) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
@@ -57,13 +58,17 @@ const menuReply = async (ctx: MyContext) => {
 };
 
 const messageTextReply = async (ctx: MyContext) => {
+  if (ctx.message!.text?.startsWith("#all")) {
+    sendMessageToAll(ctx);
+    return;
+  }
   if (ctx.message!.text) {
     const cleanedText = ctx
       .message!.text.replace("@trackrate_bot", "")
       .trim()
       .toLowerCase();
 
-    const result = await getOneAssetRateFromAPI(ctx,cleanedText.substring(1));
+    const result = await getOneAssetRateFromAPI(ctx, cleanedText.substring(1));
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
@@ -135,7 +140,7 @@ const removeTrackedAssetReply = async (ctx: MyContext) => {
   }
   const lang = ctx.session.__language_code;
   const data = userStoredDataResult?.UserAssetTrack!.map((a) => ({
-    name: `${startCase(lang === "en"?a.asset.enName[0]:a.asset.faName[0])}  ${a.threshold} %`,
+    name: `${startCase(lang === "en" ? a.asset.enName[0] : a.asset.faName[0])}  ${a.threshold} %`,
     query: "remove_" + a.asset.code,
   }));
   await ctx.reply(ctx.t("removeCaption"), {
@@ -170,7 +175,7 @@ const priceHistoryReply = async (
   return ctx.replyWithPhoto(
     new InputFile(historyChartData.chartImage, "chart.png"),
     {
-      caption: `${ctx.t("priceChart")}\n ${ctx.t("asset")} ${userLang === "en" ? asset.enName[0] : asset.faName[0]}\n ${ctx.t("period")}: ${periodObject!.name}\n${ctx.t("aiAnalisis")}:\n${historyChartData.aiAnalisis}`,
+      caption: `${ctx.t("priceChart")}\n ${ctx.t("asset")}: ${userLang === "en" ? asset.enName[0] : asset.faName[0]}\n ${ctx.t("period")}: ${periodObject!.name}\n${ctx.t("aiAnalisis")}:\n${historyChartData.aiAnalisis}`,
     }
   );
 };

@@ -28,7 +28,14 @@ choosePercentageCaption = لطفا یک درصد را انتخاب کنید تا
 chooseAnAsset = لطفا یک دارایی را از لیست زیر انتخاب نمایید:
 assetUpdated = آپدیت شد و در صورت تغییر این دارایی، شما یک پیام دریافت خواهید کرد.
                 /myassets
+                /allassets
                 /menu 
+                /help
+assetSaved = دارایی ذخیره شد و در صورت تغییر این دارایی، شما یک پیام دریافت خواهید کرد.
+                /myassets
+                /allassets
+                /menu
+                /help
 chooseLanguage = لطفا زبان مورد نظر خود را انتخاب نمایید:
 noPriceHistory = تاریخچه قیمتی یافت نشد.
 somethingWrong = خطایی رخ داده است. /help
@@ -61,3 +68,4 @@ price = قیمت
 lastPrice = آخرین قیمت
 sinceYesterday = اختلاف قیمت از دیروز
 recentChange = تغییرات اخیر
+percentage = درصد

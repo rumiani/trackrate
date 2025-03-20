@@ -28,6 +28,7 @@ choosePercentageCaption = Select the percentage change at which you’d like to 
 assetUpdated = has been updated and you will get a message when the change happens.
                 /myassets
                 /menu 
+assetSaved = Asset has been saved and you will get a message when the change happens.\n/myassets\n/menu
 chooseLanguage = Please select a language from the list:
 noPriceHistory = No price history available.
 somethingWrong = Something went wrong. /help
@@ -61,3 +62,4 @@ price = Price
 lastPrice = Last Price
 sinceYesterday = Since Yesterday
 recentChange = Recent Change
+percentage = Percentage

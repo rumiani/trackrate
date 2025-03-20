@@ -54,6 +54,7 @@ bot.use(async (ctx, next) => {
 bot.command("start", replies.startReply);
 bot.command("menu", replies.menuReply);
 bot.command("language", replies.langMenuReply);
+bot.on("message:text", async (ctx) => replies.messageTextReply(ctx));
 
 bot.on("callback_query:data", async (ctx) => {
   const { message, data } = ctx.callbackQuery;
@@ -124,5 +125,3 @@ bot.on("callback_query:data", async (ctx) => {
   }
   ctx.answerCallbackQuery();
 });
-
-bot.on("message:text", async (ctx) => replies.messageTextReply(ctx));
