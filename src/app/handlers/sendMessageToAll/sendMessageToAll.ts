@@ -2,30 +2,38 @@ import { bot, MyContext } from "@/app/bot";
 import prisma from "@/lib/prisma";
 
 export async function sendMessageToAll(ctx: MyContext) {
-  const AdminId = process.env.TELEGRAM_ADMIN_ID!;
-  const userId = ctx.from!.id.toString();
-  if (userId != AdminId) return;
+  const adminId = process.env.TELEGRAM_ADMIN_ID;
+  const userId = ctx.from?.id.toString();
 
-  let msg = ctx.message!.text!;
-  const msgLang = msg.startsWith("#allen") ? "en" : "fa";
-  const users = await prisma.user.findMany();
+  if (!adminId || !userId || userId !== adminId) return;
 
-  const englishUsers = users.filter((user) => user.languageCode === "en");
-  const persianUsers = users.filter((user) => user.languageCode !== "en");
+  const msg = ctx.message?.text?.replace(/#allen|#allfa/gi, "").trim();
+  if (!msg) return ctx.reply("❗ No message to send.");
 
-  msg = msg.replace(/#allen|#allfa/gi, "");
-  if (msgLang === "en") {
-    for (const user of englishUsers) {
-      bot.api.sendMessage(user.telegramId, msg);
+  const msgLang = ctx.message?.text?.startsWith("#allen") ? "en" : "fa";
+
+  try {
+    const users = await prisma.user.findMany({
+      where: { languageCode: msgLang === "en" ? "en" : { not: "en" } },
+    });
+
+    if (users.length === 0) {
+      return ctx.reply("❗ No users found for the selected language.");
     }
-  } else {
-    for (const user of persianUsers) {
-      bot.api.sendMessage(user.telegramId, msg);
-    }
+
+    await Promise.all(
+      users.map((user) =>
+        bot.api
+          .sendMessage(user.telegramId, msg)
+          .catch((e) =>
+            console.error(`Failed to send message to ${user.telegramId}:`, e)
+          )
+      )
+    );
+
+    await ctx.reply(`✅ The message has been sent to ${users.length} users.`);
+  } catch (error) {
+    console.error(error);
+    await ctx.reply("❗ An error occurred while sending messages.");
   }
-
-  bot.api.sendMessage(
-    AdminId!,
-    `✅\nThe message has been sent to all the users:\n${msg}`
-  );
 }
