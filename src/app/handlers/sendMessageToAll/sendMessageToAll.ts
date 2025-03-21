@@ -23,17 +23,15 @@ export async function sendMessageToAll(ctx: MyContext) {
 
     await Promise.all(
       users.map((user) =>
-        bot.api
-          .sendMessage(user.telegramId, msg)
-          .catch((e) =>
-            console.error(`Failed to send message to ${user.telegramId}:`, e)
-          )
+        bot.api.sendMessage(user.telegramId, msg).catch((e) => {
+          console.error(`Failed to send message to ${user.telegramId}:`, e);
+          ctx.reply(`Failed to send message to ${user.telegramId}`);
+        })
       )
     );
 
     await ctx.reply(`✅ The message has been sent to ${users.length} users.`);
-  } catch (error) {
-    console.error(error);
+  } catch {
     await ctx.reply("❗ An error occurred while sending messages.");
   }
 }
