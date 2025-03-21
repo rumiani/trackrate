@@ -59,7 +59,7 @@ const menuReply = async (ctx: MyContext) => {
 
 const messageTextReply = async (ctx: MyContext) => {
   if (ctx.message!.text?.startsWith("#all")) {
-    sendMessageToAll(ctx);
+    await sendMessageToAll(ctx);
     return;
   }
   if (ctx.message!.text) {
