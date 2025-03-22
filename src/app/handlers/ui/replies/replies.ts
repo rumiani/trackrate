@@ -18,7 +18,8 @@ import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allA
 import userStoredData from "../../user/userStoredData/userStoredData";
 import { priceHistoryChart } from "../../priceHistoryChart/priceHistoryChart";
 import { AssetDBTypes } from "@/types/other";
-import { sendMessageToAll } from "../../sendMessageToAll/sendMessageToAll";
+import { adminMessageToUsers } from "../../adminMessageToUsers/adminMessageToUsers";
+import { adminGetsInfo } from "../../adminGetsInfo/adminGetsInfo";
 
 const startReply = async (ctx: MyContext) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
@@ -58,10 +59,9 @@ const menuReply = async (ctx: MyContext) => {
 };
 
 const messageTextReply = async (ctx: MyContext) => {
-  if (ctx.message!.text?.startsWith("#all")) {
-    await sendMessageToAll(ctx);
-    return;
-  }
+  if (ctx.message!.text?.startsWith("#")) return await adminMessageToUsers(ctx);
+  if (ctx.message!.text?.startsWith("@")) return await adminGetsInfo(ctx);
+
   if (ctx.message!.text) {
     const cleanedText = ctx
       .message!.text.replace("@trackrate_bot", "")
