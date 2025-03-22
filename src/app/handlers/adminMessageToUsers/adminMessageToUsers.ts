@@ -10,15 +10,16 @@ export async function adminMessageToUsers(ctx: MyContext) {
 
   const msg = ctx.message!.text!.split("\n").slice(1).join("\n").trim();
 
-  const [lang, command] = ctx.message!.text!.split("#").slice(1);
+  const [lang, command] = ctx.message!.text!.split("\n")[0].split("#").slice(1);
   if (isEmpty(msg)) return ctx.reply("Message is empty!");
   // commands handlers
+
   if (command === "all") {
-    return await sendMessageToAll({ ctx, msg, lang });
-  } else if (command === "usersnoasset") {
+      return await sendMessageToAll({ ctx, msg, lang });
+    } else if (command === "usersnoasset") {
     return await toUsersWithNoAssetTrack({ ctx, msg, lang });
   } else {
-    ctx.reply(
+    return await ctx.reply(
       `List of commands by which you can send users a message:\n #en#all , #fa#all \n #en#usersnoasset , #fa#usersnoasset`
     );
   }
