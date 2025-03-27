@@ -12,11 +12,11 @@ export async function adminMessageToUsers(ctx: MyContext) {
 
   const [lang, command] = ctx.message!.text!.split("\n")[0].split("#").slice(1);
   if (isEmpty(msg)) return ctx.reply("Message is empty!");
-  // commands handlers
 
+  // commands handlers
   if (command === "all") {
-      return await sendMessageToAll({ ctx, msg, lang });
-    } else if (command === "usersnoasset") {
+    return await sendMessageToAll({ ctx, msg, lang });
+  } else if (command === "usersnoasset") {
     return await toUsersWithNoAssetTrack({ ctx, msg, lang });
   } else {
     return await ctx.reply(

@@ -3,13 +3,13 @@ import { brsapiCurrencyTypes } from "@/types/other";
 export default async function goldAndCurrencyPrice() {
   try {
     const response = await fetch(
-      "https://brsapi.ir/FreeTsetmcBourseApi/Api_Free_Gold_Currency_v2.json"
+      `https://BrsApi.ir/Api/Market/Gold_Currency.php?key=${process.env!.BRS_API_KEY}`
     );
     const goldAndCurrency = await response.json();
-    const currenciesRateArray:brsapiCurrencyTypes[] = goldAndCurrency.currency;
-    const goldsRateArray:brsapiCurrencyTypes[] = goldAndCurrency.gold;
+    const currenciesRateArray: brsapiCurrencyTypes[] = goldAndCurrency.currency;
+    const goldsRateArray: brsapiCurrencyTypes[] = goldAndCurrency.gold;
     return { currenciesRateArray, goldsRateArray };
   } catch {
-    return null
+    return null;
   }
 }
