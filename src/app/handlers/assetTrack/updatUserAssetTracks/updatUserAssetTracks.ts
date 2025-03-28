@@ -1,9 +1,9 @@
 import prisma from "@/lib/prisma";
 import { DirectionType, TrackingType } from "@prisma/client";
 import userStoredData from "../../user/userStoredData/userStoredData";
-import { allAssetsObjectsFromDB } from "../../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 import { startCase } from "lodash";
 import { MyContext } from "@/app/bot";
+import { allAssetsFromDB } from "../../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 
 export async function updatUserAssetTracks(data: {
   code: string;
@@ -35,7 +35,7 @@ export async function updatUserAssetTracks(data: {
         : foundAssetTrack.asset.faName[0];
       return `${startCase(track)} ${ctx.t("assetUpdated")}`;
     }
-    const allAssets = await allAssetsObjectsFromDB(ctx);
+    const allAssets = await allAssetsFromDB(ctx);
     const asset = allAssets?.allAssets.find(
       (asset) => asset.code.toLowerCase() === code.toLowerCase()
     );

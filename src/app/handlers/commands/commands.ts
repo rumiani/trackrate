@@ -1,11 +1,11 @@
-import { allAssetsObjectsFromDB } from "../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 import { uploadAssetsObjectToTheDB } from "../assets/uploadAllAssetsToTheDB/uploadAllAssetsToTheDB";
 import { replies } from "../ui/replies/replies";
 import { Message } from "grammy/types";
 import { MyContext } from "@/app/bot";
+import { allAssetsFromDB } from "../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 
 export default async function commands(messageText: string, ctx: MyContext) {
-  const allAssets = await allAssetsObjectsFromDB(ctx);
+  const allAssets = await allAssetsFromDB(ctx);
 
   const commandReplies: Record<string, () => Promise<Message>> = {
     "/myassets": async () => await replies.myListReply(ctx),
