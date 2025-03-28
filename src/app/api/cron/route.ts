@@ -1,22 +1,21 @@
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 import { NextResponse } from "next/server";
-// import changeUpdate from "@/app/handlers/changeUpdate/changeUpdate";
 import { bot } from "@/app/bot";
 import { updateAssetsPrice } from "@/app/handlers/assets/updateAssetsPrice/updateAssetsPrice";
-import { allAssetsPrice } from "@/app/handlers/assets/assetsRateHandler/allAssetsPrice";
 import { allAssetTracksObjectsFromDB } from "@/app/handlers/assetTrack/allAssetTracksObjectsFromDB/allAssetTracksObjectsFromDB";
 import oneAssetRateFromTheBigObject from "@/app/handlers/assets/assetsRateHandler/oneAssetRateFromTheBigObject";
 import { lastNotifUpdate } from "@/app/handlers/user/lastNotifUpdate/lastNotifUpdate";
+import { allAssetsPrice } from "@/app/handlers/assets/assetsRateHandler/assetsPrice/allAssetsPrice";
 
-export const POST = async (req: Request) => {
-  const userAgent = req.headers.get("user-agent");
-  const UnauthorizedReq =
-    req.headers.get("X-Cron-Token") !== process.env.CRON_SECRET;
+export const GET = async (req: Request) => {
   try {
-    if (!userAgent || !userAgent.includes("cron-job.org") || UnauthorizedReq)
-      return NextResponse.json("Unauthorized", { status: 403 });
-    // changeUpdate();
+    if (
+      req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
+    ) {
+      return NextResponse.json("Unauthorized", { status: 401 });
+    }
+
     const allAssetsPriceResult = await allAssetsPrice();
 
     const assetTracks = await allAssetTracksObjectsFromDB();
@@ -40,7 +39,7 @@ export const POST = async (req: Request) => {
       }
     }
     await updateAssetsPrice(allAssetsPriceResult!);
-    return NextResponse.json("Request from cronjob processed.");
+    return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json("Server error.", { status: 500 });
   }

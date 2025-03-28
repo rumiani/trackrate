@@ -1,6 +1,6 @@
 import { Bot, Context, session, SessionFlavor } from "grammy";
 import { I18n, I18nFlavor } from "@grammyjs/i18n";
-import { allAssetsObjectsFromDB } from "../handlers/assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { allAssetsFromDB } from "../handlers/assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 import { replies } from "../handlers/ui/replies/replies";
 import removeAssetTrack from "../handlers/assetTrack/removeAssetTrack/removeAssetTrack";
 import { updatUserAssetTracks } from "../handlers/assetTrack/updatUserAssetTracks/updatUserAssetTracks";
@@ -107,7 +107,7 @@ bot.on("callback_query:data", async (ctx) => {
     actionHandlers[`${action}:${value}`] || actionHandlers[action];
   if (handler) return handler(ctx, value);
 
-  const allAssets = await allAssetsObjectsFromDB(ctx);
+  const allAssets = await allAssetsFromDB(ctx);
   if (allAssets?.assetsCodes.includes(action)) {
     const asset = allAssets.allAssets.find(
       (asset) => asset?.code.toLowerCase() === action.toLowerCase()

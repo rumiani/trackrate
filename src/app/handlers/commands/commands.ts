@@ -1,4 +1,4 @@
-import { allAssetsObjectsFromDB } from "../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { allAssetsObjectsFromDB } from "../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 import { uploadAssetsObjectToTheDB } from "../assets/uploadAllAssetsToTheDB/uploadAllAssetsToTheDB";
 import { replies } from "../ui/replies/replies";
 import { Message } from "grammy/types";

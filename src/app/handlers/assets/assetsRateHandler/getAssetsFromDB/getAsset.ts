@@ -1,5 +1,5 @@
 import { MyContext } from "@/app/bot";
-import { allAssetsObjectsFromDB } from "../allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { allAssetsObjectsFromDB } from "./allAssetsFromDB/allAssetsFromDB";
 
 export async function getAsset(ctx:MyContext,assetName: string) {
   const allAssetsObjects = await allAssetsObjectsFromDB(ctx);

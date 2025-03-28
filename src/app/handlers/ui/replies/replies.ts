@@ -5,7 +5,7 @@ import { keyboardBuilder } from "../keyboardBuilder/keyboardBuilder";
 import { capitalize, isEmpty, startCase } from "lodash";
 import { addUser } from "../../user/addUser/addUser";
 import commands from "../../commands/commands";
-import getOneAssetRateFromAPI from "../../assets/assetsRateHandler/getOneAssetRateFromAPI";
+
 import {
   allCategoriesKeyboardData,
   languageKeyboardData,
@@ -14,12 +14,13 @@ import {
   priceHistoryKeyboardData,
   selectAssetsKeyboardData,
 } from "@/data/keyboardObjects";
-import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { allAssetsFromDB } from "../../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 import userStoredData from "../../user/userStoredData/userStoredData";
 import { priceHistoryChart } from "../../priceHistoryChart/priceHistoryChart";
 import { AssetDBTypes } from "@/types/other";
 import { adminMessageToUsers } from "../../adminMessageToUsers/adminMessageToUsers";
 import { adminGetsInfo } from "../../adminGetsInfo/adminGetsInfo";
+import getOneAssetObjectFromDB from "../../assets/assetsRateHandler/getOneAssetFromDB";
 
 const startReply = async (ctx: MyContext) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
@@ -68,7 +69,7 @@ const messageTextReply = async (ctx: MyContext) => {
       .trim()
       .toLowerCase();
 
-    const result = await getOneAssetRateFromAPI(ctx, cleanedText.substring(1));
+    const result = await getOneAssetObjectFromDB(ctx, cleanedText.substring(1));
     if (result) return await ctx.reply(result.resultText);
 
     if (cleanedText.startsWith("/")) {
@@ -81,7 +82,7 @@ const assetReply = async (
   assetType: string,
   operation: string
 ) => {
-  const allAssetsResult = await allAssetsObjectsFromDB(ctx);
+  const allAssetsResult = await allAssetsFromDB(ctx);
   const lang = ctx.session.__language_code;
   const data = allAssetsResult?.allAssets
     .filter(
@@ -157,7 +158,7 @@ const percentageReply = async (ctx: MyContext, value: string) => {
   });
 };
 const listReply = async (ctx: MyContext) => {
-  const allAssets = await allAssetsObjectsFromDB(ctx);
+  const allAssets = await allAssetsFromDB(ctx);
   await ctx.reply(`${ctx.t("assetsList")}\n${allAssets?.assetsComandList}`);
 };
 const priceHistoryReply = async (

@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { DirectionType, TrackingType } from "@prisma/client";
 import userStoredData from "../../user/userStoredData/userStoredData";
-import { allAssetsObjectsFromDB } from "../../assets/allAssetsObjectsFromDB/allAssetsObjectsFromDB";
+import { allAssetsObjectsFromDB } from "../../assets/assetsRateHandler/getAssetsFromDB/allAssetsFromDB/allAssetsFromDB";
 import { startCase } from "lodash";
 import { MyContext } from "@/app/bot";
 

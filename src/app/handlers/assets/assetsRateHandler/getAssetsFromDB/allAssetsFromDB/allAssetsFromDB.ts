@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { AssetType } from "@prisma/client";
 import { startCase, toLower, toUpper } from "lodash";
 
-export async function allAssetsObjectsFromDB(ctx: MyContext) {
+export async function allAssetsFromDB(ctx: MyContext) {
   try {
     const allAssets = await prisma.asset.findMany();
     const typeOrder = { FIAT: 1, GOLD: 2, CRYPTO: 3 };
