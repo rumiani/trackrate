@@ -3,10 +3,6 @@
       "app/api/**": {
         "includeFiles": "assets/fonts/**/*"
       }
-    },
-    "crons": [{
-    "path": "/api/cron",
-    "schedule": "* * * * *"
-  }]
-}
+    }
+  }
   
