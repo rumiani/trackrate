@@ -7,6 +7,7 @@ export async function updateAssetsPrice(
   assetsFromAPI: BigAssetsDataObjectTypes
 ) {
   const assets = await prisma.asset.findMany();
+  const adminId = +process.env.TELEGRAM_ADMIN_ID!;
 
   try {
     const updatePromises = assets.map(async (asset) => {
@@ -49,8 +50,7 @@ export async function updateAssetsPrice(
     });
 
     await Promise.all(updatePromises.filter(Boolean)); // Remove null promises
-
-    const adminId = +process.env.TELEGRAM_ADMIN_ID!;
-    bot.api.sendMessage(adminId!, "Assets price updated.");
-  } catch {}
+  } catch {
+    bot.api.sendMessage(adminId!, "Updating assets failed.");
+  }
 }
