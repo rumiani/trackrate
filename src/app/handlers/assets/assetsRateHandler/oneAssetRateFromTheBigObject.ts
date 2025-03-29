@@ -13,18 +13,18 @@ import { i18n } from "@/app/bot";
 
 export default function oneAssetRateFromTheBigObject(
   userLang: string,
-  bigAssetsDataObject: BigAssetsDataObjectTypes,
+  allAssetsPriceResult: BigAssetsDataObjectTypes,
   userAssetTrack: UserAssetTrack,
   asset: AssetDBTypes
 ) {
   try {
-    if (!asset) throw new Error("Invalid asset data");
+
     const { type, code, enName, faName, currentPrice } = asset;
     let newPrice;
     let lastChange;
 
     if (type === "CRYPTO") {
-      const resultCoin = bigAssetsDataObject.cryptoRateArray.find(
+      const resultCoin = allAssetsPriceResult.cryptoRateArray.find(
         (obj: CoinData) => obj.symbol.toLowerCase() === code.toLowerCase()
       );
       newPrice = resultCoin!.current_price;
@@ -32,8 +32,8 @@ export default function oneAssetRateFromTheBigObject(
     } else {
       const assetArray =
         type === "FIAT"
-          ? bigAssetsDataObject.currenciesRateArray
-          : bigAssetsDataObject.goldsRateArray;
+          ? allAssetsPriceResult.currenciesRateArray
+          : allAssetsPriceResult.goldsRateArray;
       const currency = assetArray.find(
         (item: brsapiCurrencyTypes) =>
           enName.includes(item.name.toLowerCase()) ||

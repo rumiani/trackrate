@@ -26,7 +26,7 @@ export const GET = async (req: Request) => {
         assetTrack,
         assetTrack.asset
       );
-      if (oneAsset && oneAsset?.bigChange) {
+      if (oneAsset && oneAsset.bigChange) {
         try {
           await bot.api.sendMessage(
             assetTrack.user.telegramId,
@@ -34,7 +34,7 @@ export const GET = async (req: Request) => {
           );
           await lastNotifUpdate(assetTrack.user.telegramId);
         } catch {
-          bot.api.sendMessage(1028887352, "Error tracking change");
+          bot.api.sendMessage(1028887352, "Error tracking changes");
         }
       }
     }
