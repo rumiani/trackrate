@@ -50,7 +50,11 @@ export async function updateAssetsPrice(
     });
 
     await Promise.all(updatePromises.filter(Boolean)); // Remove null promises
-  } catch {
-    bot.api.sendMessage(adminId!, "Updating assets failed.");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      bot.api.sendMessage(adminId!, `Updating assets failed.\n${error.message}`);
+    } else {
+      bot.api.sendMessage(adminId!, `Updating assets failed.\nAn unknown error occurred.`);
+    }
   }
 }
