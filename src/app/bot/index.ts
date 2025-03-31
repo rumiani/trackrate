@@ -8,6 +8,7 @@ import { percentageKeyboardData, periodArray } from "@/data/keyboardObjects";
 import userStoredData from "../handlers/user/userStoredData/userStoredData";
 import path from "path";
 import { changeUserLang } from "../handlers/user/changeUserLang/changeUserLang";
+import { limit } from "@grammyjs/ratelimiter";
 
 interface SessionData {
   __language_code?: string;
@@ -29,7 +30,7 @@ export const i18n = new I18n<MyContext>({
 bot.use(
   session({
     initial: (): SessionData => ({
-      __language_code: undefined, // Start with no language set
+      __language_code: undefined,
     }),
   })
 );
@@ -44,12 +45,21 @@ bot.use(async (ctx, next) => {
       ctx.i18n.useLocale(ctx.session.__language_code);
     } catch (error) {
       console.error("Error fetching user language:", error);
-      ctx.session.__language_code = "en"; // Fallback on error
+      ctx.session.__language_code = "en";
       ctx.i18n.useLocale("en");
     }
   }
   await next();
 });
+
+bot.use(
+  limit({
+    timeFrame: 60000,
+    limit: 10,
+    onLimitExceeded: async (ctx) => await ctx.reply(ctx.t("tooManyRequests")),
+    keyGenerator: (ctx) => ctx.from?.id.toString(),
+  })
+);
 
 bot.command("start", replies.startReply);
 bot.command("menu", replies.menuReply);
@@ -119,7 +129,11 @@ bot.on("callback_query:data", async (ctx) => {
         ctx,
       });
       return ctx.reply(updateMessage!);
-    } else if (periodArray(ctx).map(({ date }) => date).includes(value)) {
+    } else if (
+      periodArray(ctx)
+        .map(({ date }) => date)
+        .includes(value)
+    ) {
       return replies.priceHistoryReply(ctx, asset!, value);
     }
   }

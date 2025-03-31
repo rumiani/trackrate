@@ -69,3 +69,5 @@ lastPrice = آخرین قیمت
 sinceYesterday = اختلاف قیمت از دیروز
 recentChange = تغییرات اخیر
 percentage = درصد
+
+tooManyRequests = در هر دقیقه فقط ۵ درخواست می‌توانید به بات ارسال کنید

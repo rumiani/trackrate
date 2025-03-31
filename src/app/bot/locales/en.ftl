@@ -63,3 +63,5 @@ lastPrice = Last Price
 sinceYesterday = Since Yesterday
 recentChange = Recent Change
 percentage = Percentage
+
+tooManyRequests = You can send only 5 messages in 60 seconds.

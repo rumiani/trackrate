@@ -14,7 +14,7 @@ export async function updateAssetsPrice(
       let newPrice: number | null = null;
 
       if (asset.type === "CRYPTO") {
-        const resultCoin = assetsFromAPI!.cryptoRateArray.find(
+        const resultCoin = assetsFromAPI.cryptoRateArray.find(
           (obj: CoinData) =>
             obj.symbol.toLowerCase() === asset.code.toLowerCase()
         );
