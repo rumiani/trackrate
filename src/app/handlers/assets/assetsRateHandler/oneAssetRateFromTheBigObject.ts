@@ -18,7 +18,6 @@ export default function oneAssetRateFromTheBigObject(
   asset: AssetDBTypes
 ) {
   try {
-
     const { type, code, enName, faName, currentPrice } = asset;
     let newPrice;
     let lastChange;
@@ -49,14 +48,14 @@ export default function oneAssetRateFromTheBigObject(
     const toman = enLang ? "T" : "تومان";
     const dollar = enLang ? "$" : "دلار";
     const moneySign = type === "CRYPTO" ? dollar : toman;
-    const direction = newPrice > currentPrice ? "⬆" : "⬇";
-
+    const recentChangeDir = newPrice > currentPrice ? "🟢" : "🔴";
+    const sinceYesterdayDir = lastChange > 0 ? "🟢" : "🔴";
     const resultText = `🚨🚨🚨🚨🚨🚨🚨
     - ${startCase(enLang ? enName[0] : faName[0])}
     📌 ${i18n.fluent.translate(userLang, "price") || "Price"}: ${formatNumHandler(newPrice)} ${moneySign}
     📉 ${i18n.fluent.translate(userLang, "lastPrice") || "Last Price"}: ${formatNumHandler(currentPrice)} ${moneySign}
-    📊 ${i18n.fluent.translate(userLang, "recentChange") || "Recent Change"}: ${round(percentage, 2)}% ${direction}
-    🗓 ${i18n.fluent.translate(userLang, "sinceYesterday") || "Since Yesterday"}: ${round(lastChange, 2)}% ${lastChange > 0 ? "⬆" : "⬇"}
+    📊 ${i18n.fluent.translate(userLang, "recentChange") || "Recent Change"}: ${round(percentage, 2)}% ${recentChangeDir}
+    🗓 ${i18n.fluent.translate(userLang, "sinceYesterday") || "Since Yesterday"}: ${round(lastChange, 2)}% ${sinceYesterdayDir}
     
     🔗 /assets
     📜 /menu`;

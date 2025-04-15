@@ -55,8 +55,8 @@ export async function priceHistoryChart(
         legend: {
           labels: {
             font: {
-              size: 14, // Ensure the font size is appropriate
-              family: "Roboto", // Use Arial for labels
+              size: 14,
+              family: "Roboto",
             },
           },
         },
