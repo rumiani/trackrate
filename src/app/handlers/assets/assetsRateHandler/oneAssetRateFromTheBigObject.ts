@@ -48,8 +48,8 @@ export default function oneAssetRateFromTheBigObject(
     const toman = enLang ? "T" : "تومان";
     const dollar = enLang ? "$" : "دلار";
     const moneySign = type === "CRYPTO" ? dollar : toman;
-    const recentChangeDir = newPrice > currentPrice ? "🟢" : "🔴";
-    const sinceYesterdayDir = lastChange > 0 ? "🟢" : "🔴";
+    const recentChangeDir = newPrice > currentPrice ? "🔼" : "🔽";
+    const sinceYesterdayDir = lastChange > 0 ? "🔼" : "🔽";
     const resultText = `🚨🚨🚨🚨🚨🚨🚨
     - ${startCase(enLang ? enName[0] : faName[0])}
     📌 ${i18n.fluent.translate(userLang, "price") || "Price"}: ${formatNumHandler(newPrice)} ${moneySign}
