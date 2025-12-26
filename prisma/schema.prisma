@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AssetType {
+  CRYPTO
+  FIAT
+  GOLD
+}
+
+enum TrackingType {
+  PERCENTAGE_CHANGE
+  PRICE_REACH
+}
+
+enum DirectionType {
+  INCREASE
+  DECREASE
+}
+
+enum TableStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum NotificationType {
+  PER_MINUTE
+  PER10MINUTES
+  HOURLY
+  EVERY_6_HOURS
+  DAILY
+  WEEKLY
+  MONTHLY
+  OFF
+}
+
+model User {
+  id               String           @id @default(uuid()) @db.Uuid
+  telegramId       String           @unique
+  name             String?
+  username         String?
+  isBot            Boolean          @default(false)
+  languageCode     String?
+  status           TableStatus      @default(ACTIVE)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  lastNotification DateTime?
+  notificationPref NotificationType @default(HOURLY)
+  UserAssetTrack   UserAssetTrack[]
+  Notification     Notification[]
+
+  @@index([telegramId])
+  @@index([username])
+  @@index([id])
+}
+
+model Asset {
+  id           String           @id @default(uuid()) @db.Uuid
+  code         String           @unique
+  enName       String[]
+  faName       String[]
+  type         AssetType
+  currentPrice Float
+  status       TableStatus      @default(ACTIVE)
+  updatedAt    DateTime
+  priceHistory PriceHistory[]
+  trackedBy    UserAssetTrack[]
+  Notification Notification[]
+
+  // For fast code/type queries (common filters)
+  @@unique([code, type])
+  @@index([code])
+  @@index([type])
+  @@index([updatedAt])
+}
+
+model UserAssetTrack {
+  id           String         @id @default(uuid())
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String         @db.Uuid
+  asset        Asset          @relation(fields: [assetId], references: [id])
+  assetId      String         @db.Uuid
+  threshold    Float
+  trackingType TrackingType
+  direction    DirectionType?
+  createdAt    DateTime       @default(now())
+
+  // For fast user-asset relationship queries
+  @@index([userId, assetId])
+  @@index([assetId])
+}
+
+model PriceHistory {
+  id        String   @id @default(uuid())
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  assetId   String   @db.Uuid
+  price     Float
+  createdAt DateTime @default(now())
+
+  // Optimized for time-series queries
+  @@index([assetId, createdAt])
+}
+
+model Notification {
+  id            String @id @default(uuid())
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String @db.Uuid
+  asset         Asset  @relation(fields: [assetId], references: [id])
+  assetId       String @db.Uuid
+  changeAmount  Float
+  originalPrice Float
+  newPrice      Float
+  sentAt DateTime @default(now())
+
+  // For notification history lookups
+  @@index([userId])
+  @@index([assetId])
+  @@index([sentAt])
+}
