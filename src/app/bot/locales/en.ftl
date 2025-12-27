@@ -32,7 +32,6 @@ assetSaved = Asset has been saved and you will get a message when the change hap
 chooseLanguage = Please select a language from the list:
 noPriceHistory = No price history available.
 somethingWrong = Something went wrong. /help
-history = history
 
 aiAnalisis = AI analisis
 period = Period
@@ -65,3 +64,7 @@ recentChange = Recent Change
 percentage = Percentage
 
 tooManyRequests = You can send only 5 messages in 60 seconds.
+
+assetMenuCaption = Track assets' changes and check out history
+track = Track
+history = History

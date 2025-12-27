@@ -1,7 +1,7 @@
 import { bot } from "@/app/bot";
 import prisma from "@/lib/prisma";
 import { CoinData } from "@/types/coinDataTypes";
-import { BigAssetsDataObjectTypes, brsapiCurrencyTypes } from "@/types/other";
+import { AssetDBTypes, AssetTypes, BigAssetsDataObjectTypes, brsapiCurrencyTypes } from "@/types/other";
 
 export async function updateAssetsPrice(
   assetsFromAPI: BigAssetsDataObjectTypes
@@ -10,7 +10,7 @@ export async function updateAssetsPrice(
   const adminId = +process.env.TELEGRAM_ADMIN_ID!;
 
   try {
-    const updatePromises = assets.map(async (asset) => {
+    const updatePromises = assets.map(async (asset: AssetDBTypes) => {
       let newPrice: number | null = null;
 
       if (asset.type === "CRYPTO") {

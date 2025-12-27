@@ -91,18 +91,18 @@ bot.on("callback_query:data", async (ctx) => {
     "category:list": (ctx) => replies.listReply(ctx),
     "category:history": (ctx) => replies.assetHistoryListReply(ctx),
 
-    // + Add assets category
-    "select:crypto": (ctx) => replies.assetReply(ctx, "crypto", "add"),
-    "select:fiat": (ctx) => replies.assetReply(ctx, "fiat", "add"),
-    "select:gold": (ctx) => replies.assetReply(ctx, "gold", "add"),
+    // + Track assets category
+    "select:crypto": (ctx) => replies.assetReply(ctx, "crypto", "track"),
+    "select:fiat": (ctx) => replies.assetReply(ctx, "fiat", "track"),
+    "select:gold": (ctx) => replies.assetReply(ctx, "gold", "track"),
 
     // 🔍 Asset History
     "history:crypto": (ctx) => replies.assetReply(ctx, "crypto", "history"),
     "history:fiat": (ctx) => replies.assetReply(ctx, "fiat", "history"),
     "history:gold": (ctx) => replies.assetReply(ctx, "gold", "history"),
 
-    // 📊 Adding Assets
-    add: (ctx, value) => replies.percentageReply(ctx, value),
+    // 📊 Tracking Assets
+    track: (ctx, value) => replies.percentageReply(ctx, value),
     history: (ctx, value) => replies.periodsReply(ctx, value),
 
     // ❌ Removing Assets
@@ -134,7 +134,8 @@ bot.on("callback_query:data", async (ctx) => {
         ctx,
       });
       return ctx.reply(updateMessage!);
-    } else if (
+    }
+    if (
       periodArray(ctx)
         .map(({ date }) => date)
         .includes(value)

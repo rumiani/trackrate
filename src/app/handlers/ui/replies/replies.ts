@@ -8,6 +8,7 @@ import commands from "../../commands/commands";
 
 import {
   allCategoriesKeyboardData,
+  assetMenuKeyboardData,
   languageKeyboardData,
   percentageKeyboardData,
   periodArray,
@@ -70,7 +71,12 @@ const messageTextReply = async (ctx: MyContext) => {
       .toLowerCase();
 
     const result = await getOneAssetObjectFromDB(ctx, cleanedText.substring(1));
-    if (result) return await ctx.reply(result.resultText);
+    if (result) {
+      const resultTextAndCaption = result.resultText + "\n" + ctx.t("assetMenuCaption");
+      return await ctx.reply(resultTextAndCaption, {
+        reply_markup: keyboardBuilder(ctx, assetMenuKeyboardData(ctx), 2, false),
+      });
+    }
 
     if (cleanedText.startsWith("/")) {
       await commands(cleanedText, ctx);
@@ -86,9 +92,9 @@ const assetReply = async (
   const lang = ctx.session.__language_code;
   const data = allAssetsResult?.allAssets
     .filter(
-      (asset) => asset.type.toLocaleLowerCase() === assetType.toLowerCase()
+      (asset: AssetDBTypes) => asset.type.toLocaleLowerCase() === assetType.toLowerCase()
     )
-    .map((a) => ({
+    .map((a: AssetDBTypes) => ({
       name: startCase(lang === "en" ? a.enName[0] : a.faName[0]),
       query: `${operation}_` + a.code,
     }));
@@ -112,7 +118,7 @@ const myListReply = async (ctx: MyContext) => {
     });
   }
   const textOutput = user
-    ?.UserAssetTrack!.map((assetTrack) => {
+    ?.UserAssetTrack!.map((assetTrack: any) => {
       const userLang = ctx.session.__language_code;
       const assetName =
         userLang === "en"
@@ -140,7 +146,7 @@ const removeTrackedAssetReply = async (ctx: MyContext) => {
     });
   }
   const lang = ctx.session.__language_code;
-  const data = userStoredDataResult?.UserAssetTrack!.map((a) => ({
+  const data = userStoredDataResult?.UserAssetTrack!.map((a: any) => ({
     name: `${startCase(lang === "en" ? a.asset.enName[0] : a.asset.faName[0])}  ${a.threshold} %`,
     query: "remove_" + a.asset.code,
   }));

@@ -8,19 +8,19 @@ export type CategoryKeyboardDataTypes = {
 export const allCategoriesKeyboardData = (
   ctx: MyContext
 ): CategoryKeyboardDataTypes[] => [
-  { name: ctx.t("myAssets"), query: "category_mylist" },
-  { name: ctx.t("allAssets"), query: "category_list" },
-  { name: ctx.t("priceHistory"), query: "category_history" },
-];
+    { name: ctx.t("myAssets"), query: "category_mylist" },
+    { name: ctx.t("allAssets"), query: "category_list" },
+    { name: ctx.t("priceHistory"), query: "category_history" },
+  ];
 
 export const selectAssetsKeyboardData = (
   ctx: MyContext
 ): CategoryKeyboardDataTypes[] => [
-  { name: ctx.t("crypto"), query: "select_crypto" },
-  { name: ctx.t("fiat"), query: "select_fiat" },
-  { name: ctx.t("gold"), query: "select_gold" },
-  { name: ctx.t("removeAsset"), query: "category_remove" },
-];
+    { name: ctx.t("crypto"), query: "select_crypto" },
+    { name: ctx.t("fiat"), query: "select_fiat" },
+    { name: ctx.t("gold"), query: "select_gold" },
+    { name: ctx.t("removeAsset"), query: "category_remove" },
+  ];
 
 export const percentageKeyboardData: string[] = [
   "0.3",
@@ -41,12 +41,22 @@ export const periodArray = (ctx: MyContext) => [
 export const priceHistoryKeyboardData = (
   ctx: MyContext
 ): CategoryKeyboardDataTypes[] => [
-  { name: ctx.t("crypto"), query: "history_crypto" },
-  { name: ctx.t("fiat"), query: "history_fiat" },
-  { name: ctx.t("gold"), query: "history_gold" },
-];
+    { name: ctx.t("crypto"), query: "history_crypto" },
+    { name: ctx.t("fiat"), query: "history_fiat" },
+    { name: ctx.t("gold"), query: "history_gold" },
+  ];
 
 export const languageKeyboardData: CategoryKeyboardDataTypes[] = [
   { name: "English", query: "lang_en" },
   { name: "فارسی", query: "lang_fa" },
 ];
+
+export const assetMenuKeyboardData = (
+  ctx: MyContext
+): CategoryKeyboardDataTypes[] => {
+  console.log(ctx.message?.text);
+
+  return [
+    { name: ctx.t("track"), query: "track" + `_${ctx.message?.text?.slice(1).toLowerCase()}` },
+    { name: ctx.t("history"), query: "history" + `_${ctx.message?.text?.slice(1).toLowerCase()}` },
+  ]}
