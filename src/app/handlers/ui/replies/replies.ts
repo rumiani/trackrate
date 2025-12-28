@@ -22,6 +22,7 @@ import { AssetDBTypes } from "@/types/other";
 import { adminMessageToUsers } from "../../adminMessageToUsers/adminMessageToUsers";
 import { adminGetsInfo } from "../../adminGetsInfo/adminGetsInfo";
 import getOneAssetObjectFromDB from "../../assets/assetsRateHandler/getOneAssetFromDB";
+import { UserAssetTrack } from "@prisma/client";
 
 const startReply = async (ctx: MyContext) => {
   const addUserResponse = await addUser(ctx.from as telegramUserTypes);
@@ -118,7 +119,7 @@ const myListReply = async (ctx: MyContext) => {
     });
   }
   const textOutput = user
-    ?.UserAssetTrack!.map((assetTrack: any) => {
+    ?.UserAssetTrack!.map((assetTrack: UserAssetTrack & { asset: AssetDBTypes } ) => {
       const userLang = ctx.session.__language_code;
       const assetName =
         userLang === "en"
@@ -146,7 +147,7 @@ const removeTrackedAssetReply = async (ctx: MyContext) => {
     });
   }
   const lang = ctx.session.__language_code;
-  const data = userStoredDataResult?.UserAssetTrack!.map((a: any) => ({
+  const data = userStoredDataResult?.UserAssetTrack!.map((a: UserAssetTrack & { asset: AssetDBTypes }) => ({
     name: `${startCase(lang === "en" ? a.asset.enName[0] : a.asset.faName[0])}  ${a.threshold} %`,
     query: "remove_" + a.asset.code,
   }));

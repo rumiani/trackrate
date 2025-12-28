@@ -1,7 +1,7 @@
 import { bot } from "@/app/bot";
 import prisma from "@/lib/prisma";
 import { CoinData } from "@/types/coinDataTypes";
-import { AssetDBTypes, AssetTypes, BigAssetsDataObjectTypes, brsapiCurrencyTypes } from "@/types/other";
+import { AssetDBTypes, BigAssetsDataObjectTypes, brsapiCurrencyTypes } from "@/types/other";
 
 export async function updateAssetsPrice(
   assetsFromAPI: BigAssetsDataObjectTypes
