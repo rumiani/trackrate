@@ -73,7 +73,7 @@ const messageTextReply = async (ctx: MyContext) => {
 
     const result = await getOneAssetObjectFromDB(ctx, cleanedText.substring(1));
     if (result) {
-      const resultTextAndCaption = result.resultText + "\n" + ctx.t("assetMenuCaption");
+      const resultTextAndCaption = result.resultText + "\n\n" + ctx.t("assetMenuCaption");
       return await ctx.reply(resultTextAndCaption, {
         reply_markup: keyboardBuilder(ctx, assetMenuKeyboardData(ctx), 2, false),
       });
@@ -119,7 +119,7 @@ const myListReply = async (ctx: MyContext) => {
     });
   }
   const textOutput = user
-    ?.UserAssetTrack!.map((assetTrack: UserAssetTrack & { asset: AssetDBTypes } ) => {
+    ?.UserAssetTrack!.map((assetTrack: UserAssetTrack & { asset: AssetDBTypes }) => {
       const userLang = ctx.session.__language_code;
       const assetName =
         userLang === "en"

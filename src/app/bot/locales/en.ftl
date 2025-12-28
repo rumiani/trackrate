@@ -65,6 +65,6 @@ percentage = Percentage
 
 tooManyRequests = You can send only 5 messages in 60 seconds.
 
-assetMenuCaption = Track assets' changes and check out history
+assetMenuCaption = Track assets' changes and check out history:
 track = Track
 history = History

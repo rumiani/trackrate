@@ -71,6 +71,6 @@ percentage = درصد
 
 tooManyRequests = در هر دقیقه فقط ۵ درخواست می‌توانید به بات ارسال کنید
 
-assetMenuCaption = تغییرات دارایی‌ها و تاریخچه آنها را رصد کنید
+assetMenuCaption = تغییرات دارایی‌ها و تاریخچه آنها را رصد کنید:
 track = رصد
 history = تاریخچه
